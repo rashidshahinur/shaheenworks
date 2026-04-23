@@ -1,0 +1,517 @@
+/* ================================
+   SHAHEENWORKS.COM — Base Styles
+   ================================ */
+
+/* These are your colors. Think of them as paint cans with names. */
+:root {
+  --color-bg:      #f9f6f0;  /* warm cream — like old paper */
+  --color-dark:    #2c2416;  /* deep earth — almost black */
+  --color-earth:   #7c6a4f;  /* medium brown — like river mud */
+  --color-red:     #c85a20;  /* gamcha red — your accent color */
+  --color-gold:    #e8c87a;  /* paddy gold — warm highlight */
+  --color-text:    #2c2416;  /* body text color */
+  --color-muted:   #7c6a4f;  /* quieter text */
+}
+
+/* Reset — removes browser defaults so we start clean */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* The whole page */
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.7;
+}
+
+/* ================================
+   HEADER
+   ================================ */
+header {
+  padding: 24px 48px;
+  display: flex;
+  align-items: center;
+  border-bottom: 0.5px solid var(--color-earth);
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--color-dark);
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 32px;
+}
+
+nav ul a {
+  text-decoration: none;
+  color: var(--color-earth);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+}
+
+nav ul a:hover {
+  color: var(--color-red);
+}
+
+/* ================================
+   HERO SECTION
+   ================================ */
+#hero {
+  padding: 120px 48px;
+  max-width: 800px;
+}
+
+#hero h1 {
+  font-size: 52px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-dark);
+  margin-bottom: 24px;
+}
+
+#hero p {
+  font-size: 20px;
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+/* ================================
+   CHARACTER SECTION
+   ================================ */
+#character {
+  padding: 80px 48px;
+  text-align: center;
+  color: var(--color-earth);
+  font-style: italic;
+  font-size: 16px;
+  border-top: 0.5px solid var(--color-gold);
+}
+
+/* ================================
+   APPS SECTION
+   ================================ */
+#apps {
+  padding: 80px 48px;
+  border-top: 0.5px solid var(--color-earth);
+}
+
+#apps h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--color-dark);
+  margin-bottom: 16px;
+}
+
+#apps p {
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+/* ================================
+   NOTES SECTION
+   ================================ */
+#notes {
+  padding: 80px 48px;
+  border-top: 0.5px solid var(--color-earth);
+}
+
+#notes h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--color-dark);
+  margin-bottom: 16px;
+}
+
+#notes p {
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+/* ================================
+   ABOUT SECTION
+   ================================ */
+#about {
+  padding: 80px 48px;
+  border-top: 0.5px solid var(--color-earth);
+  max-width: 640px;
+}
+
+#about h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--color-dark);
+  margin-bottom: 16px;
+}
+
+#about p {
+  color: var(--color-muted);
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+/* ================================
+   FOOTER
+   ================================ */
+footer {
+  padding: 48px;
+  border-top: 0.5px solid var(--color-earth);
+  color: var(--color-muted);
+  font-size: 13px;
+  letter-spacing: 0.05em;
+}
+
+h1, h2 {
+  font-family: 'Playfair Display', serif;
+}
+
+/* ================================
+   APP CARDS
+   ================================ */
+.app-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.app-card {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  background: #f0ebe0;
+  border: 0.5px solid #c5b89a;
+  border-radius: 12px;
+  padding: 28px;
+  text-decoration: none;
+  color: var(--color-dark);
+  transition: border-color 0.2s ease;
+}
+
+.app-card:hover {
+  border-color: var(--color-red);
+}
+
+.app-icon {
+  font-size: 32px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.app-info h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--color-dark);
+}
+
+.app-info p {
+  font-size: 14px;
+  color: var(--color-muted);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.app-tag {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-red);
+  border: 0.5px solid var(--color-red);
+  border-radius: 20px;
+  padding: 3px 10px;
+}
+
+/* ================================
+   TOP BAR
+   ================================ */
+.top-bar {
+  width: 100%;
+  height: 3px;
+  background: var(--color-red);
+}
+
+/* ================================
+   CHARACTER SECTION
+   ================================ */
+#character {
+  padding: 64px 48px;
+  border-top: 0.5px solid var(--color-gold);
+}
+
+.character-wrap {
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.kite-boy {
+  width: 100%;
+  max-width: 680px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.character-caption {
+  margin-top: 24px;
+  font-size: 16px;
+  font-style: italic;
+  color: var(--color-muted);
+}
+
+/* ================================
+   KITE ANIMATION
+   ================================ */
+
+@keyframes kite-bob {
+  0%   { transform: translateY(0px);   }
+  50%  { transform: translateY(-10px); }
+  100% { transform: translateY(0px);   }
+}
+
+.kite-float {
+  animation: kite-bob 3s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* ================================
+   SCROLL FADE-IN
+   ================================ */
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0px);
+}
+
+/* ================================
+   MOBILE — screens smaller than 600px
+   ================================ */
+
+@media (max-width: 600px) {
+
+  /* Header becomes simpler */
+  header {
+    padding: 16px 24px;
+  }
+
+  nav ul {
+    gap: 16px;
+  }
+
+  /* Hero text gets smaller */
+  #hero {
+    padding: 64px 24px;
+  }
+
+  #hero h1 {
+    font-size: 32px;
+  }
+
+  #hero p {
+    font-size: 16px;
+  }
+
+  /* Character section */
+  #character {
+    padding: 48px 24px;
+  }
+
+  /* Apps section */
+  #apps {
+    padding: 48px 24px;
+  }
+
+  /* App cards stack vertically */
+  .app-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Notes section */
+  #notes {
+    padding: 48px 24px;
+  }
+
+  /* About section */
+  #about {
+    padding: 48px 24px;
+  }
+
+  /* Footer */
+  footer {
+    padding: 32px 24px;
+  }
+
+  /* Section headings */
+  #apps h2,
+  #notes h2,
+  #about h2 {
+    font-size: 22px;
+  }
+
+}
+
+/* ================================
+   MOBILE — screens smaller than 600px
+   ================================ */
+
+@media (max-width: 600px) {
+
+  /* Header becomes simpler */
+  header {
+    padding: 16px 24px;
+  }
+
+  nav ul {
+    gap: 16px;
+  }
+
+  /* Hero text gets smaller */
+  #hero {
+    padding: 64px 24px;
+  }
+
+  #hero h1 {
+    font-size: 32px;
+  }
+
+  #hero p {
+    font-size: 16px;
+  }
+
+  /* Character section */
+  #character {
+    padding: 48px 24px;
+  }
+
+  /* Apps section */
+  #apps {
+    padding: 48px 24px;
+  }
+
+  /* App cards stack vertically */
+  .app-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Notes section */
+  #notes {
+    padding: 48px 24px;
+  }
+
+  /* About section */
+  #about {
+    padding: 48px 24px;
+  }
+
+  /* Footer */
+  footer {
+    padding: 32px 24px;
+  }
+
+  /* Section headings */
+  #apps h2,
+  #notes h2,
+  #about h2 {
+    font-size: 22px;
+  }
+
+}
+
+/* ================================
+   FOOTER
+   ================================ */
+
+footer {
+  padding: 64px 48px 32px;
+  border-top: 0.5px solid var(--color-earth);
+  margin-top: 48px;
+}
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 48px;
+}
+
+.footer-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-dark);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.footer-tagline {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--color-muted);
+}
+
+.footer-links {
+  display: flex;
+  gap: 32px;
+}
+
+.footer-links a {
+  text-decoration: none;
+  color: var(--color-earth);
+  font-size: 14px;
+  letter-spacing: 0.06em;
+}
+
+.footer-links a:hover {
+  color: var(--color-red);
+}
+
+.footer-bottom {
+  border-top: 0.5px solid var(--color-gold);
+  padding-top: 24px;
+}
+
+.footer-bottom p {
+  font-size: 12px;
+  color: var(--color-muted);
+  letter-spacing: 0.05em;
+}
+
+/* Mobile footer */
+@media (max-width: 600px) {
+  footer {
+    padding: 48px 24px 24px;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .footer-links {
+    gap: 24px;
+  }
+}
+
