@@ -2,25 +2,25 @@
    SHAHEENWORKS.COM — Base Styles
    ================================ */
 
-/* These are your colors. Think of them as paint cans with names. */
 :root {
-  --color-bg:      #f9f6f0;  /* warm cream — like old paper */
-  --color-dark:    #2c2416;  /* deep earth — almost black */
-  --color-earth:   #7c6a4f;  /* medium brown — like river mud */
-  --color-red:     #c85a20;  /* gamcha red — your accent color */
-  --color-gold:    #e8c87a;  /* paddy gold — warm highlight */
-  --color-text:    #2c2416;  /* body text color */
-  --color-muted:   #7c6a4f;  /* quieter text */
+  --color-bg:      #f5f2eb;
+  --color-surface: #faf8f3;
+  --color-border:  #d8d1c6;
+  --color-dark:    #1f1b17;
+  --color-text:    #1f1b17;
+  --color-muted:   #635f59;
+  --color-earth:   #7c6a4f;
+  --color-red:     #c85a20;
+  --color-gold:    #e8c87a;
+  --color-primary: #0e6a67;
 }
 
-/* Reset — removes browser defaults so we start clean */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* The whole page */
 body {
   background-color: var(--color-bg);
   color: var(--color-text);
@@ -29,13 +29,24 @@ body {
 }
 
 /* ================================
+   TOP BAR
+   ================================ */
+
+.top-bar {
+  width: 100%;
+  height: 3px;
+  background: var(--color-red);
+}
+
+/* ================================
    HEADER
    ================================ */
+
 header {
   padding: 24px 48px;
   display: flex;
   align-items: center;
-  border-bottom: 0.5px solid var(--color-earth);
+  border-bottom: 0.5px solid var(--color-border);
 }
 
 nav {
@@ -72,117 +83,163 @@ nav ul a:hover {
 /* ================================
    HERO SECTION
    ================================ */
-#hero {
-  padding: 120px 48px;
-  max-width: 800px;
+
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 7rem 3rem 4rem;
+  background: var(--color-bg);
 }
 
-#hero h1 {
-  font-size: 52px;
-  font-weight: 600;
-  line-height: 1.2;
+.hero-grid {
+  max-width: 1160px;
+  margin: 0 auto;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+/* LEFT COLUMN */
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.eyebrow {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 5vw, 4.8rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
   color: var(--color-dark);
-  margin-bottom: 24px;
+  margin: 0;
 }
 
-#hero p {
-  font-size: 20px;
+.hero-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.05rem;
   color: var(--color-muted);
-  font-style: italic;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: var(--color-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #0a5250;
+}
+
+.btn-ghost {
+  border: 1.5px solid var(--color-border);
+  color: var(--color-muted);
+}
+
+.btn-ghost:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* RIGHT COLUMN */
+.hero-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.character-panel {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  max-width: 380px;
+  border-radius: 24px;
+  background: linear-gradient(145deg, #1a3a4a 0%, #0e2535 50%, #1a2e1a 100%);
+  box-shadow:
+    0 0 60px rgba(14, 106, 103, 0.25),
+    0 0 120px rgba(14, 106, 103, 0.1),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.character-panel spline-viewer {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 24px;
+}
+
+/* Glow orb behind character */
+.character-panel::before {
+  content: '';
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(232, 168, 64, 0.3) 0%,
+    rgba(14, 106, 103, 0.15) 50%,
+    transparent 70%
+  );
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 /* ================================
-   CHARACTER SECTION
+   APP CARDS
    ================================ */
-#character {
-  padding: 80px 48px;
-  text-align: center;
-  color: var(--color-earth);
-  font-style: italic;
-  font-size: 16px;
-  border-top: 0.5px solid var(--color-gold);
-}
 
-/* ================================
-   APPS SECTION
-   ================================ */
 #apps {
   padding: 80px 48px;
   border-top: 0.5px solid var(--color-earth);
 }
 
 #apps h2 {
-  font-size: 28px;
-  font-weight: 600;
-  color: var(--color-dark);
-  margin-bottom: 16px;
-}
-
-#apps p {
-  color: var(--color-muted);
-  font-style: italic;
-}
-
-/* ================================
-   NOTES SECTION
-   ================================ */
-#notes {
-  padding: 80px 48px;
-  border-top: 0.5px solid var(--color-earth);
-}
-
-#notes h2 {
-  font-size: 28px;
-  font-weight: 600;
-  color: var(--color-dark);
-  margin-bottom: 16px;
-}
-
-#notes p {
-  color: var(--color-muted);
-  font-style: italic;
-}
-
-/* ================================
-   ABOUT SECTION
-   ================================ */
-#about {
-  padding: 80px 48px;
-  border-top: 0.5px solid var(--color-earth);
-  max-width: 640px;
-}
-
-#about h2 {
-  font-size: 28px;
-  font-weight: 600;
-  color: var(--color-dark);
-  margin-bottom: 16px;
-}
-
-#about p {
-  color: var(--color-muted);
-  font-size: 18px;
-  line-height: 1.8;
-}
-
-/* ================================
-   FOOTER
-   ================================ */
-footer {
-  padding: 48px;
-  border-top: 0.5px solid var(--color-earth);
-  color: var(--color-muted);
-  font-size: 13px;
-  letter-spacing: 0.05em;
-}
-
-h1, h2 {
   font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--color-dark);
+  margin-bottom: 16px;
 }
 
-/* ================================
-   APP CARDS
-   ================================ */
 .app-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -194,8 +251,8 @@ h1, h2 {
   display: flex;
   gap: 20px;
   align-items: flex-start;
-  background: #f0ebe0;
-  border: 0.5px solid #c5b89a;
+  background: var(--color-surface);
+  border: 0.5px solid var(--color-border);
   border-radius: 12px;
   padding: 28px;
   text-decoration: none;
@@ -204,7 +261,7 @@ h1, h2 {
 }
 
 .app-card:hover {
-  border-color: var(--color-red);
+  border-color: var(--color-primary);
 }
 
 .app-icon {
@@ -232,286 +289,56 @@ h1, h2 {
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--color-red);
-  border: 0.5px solid var(--color-red);
+  color: var(--color-primary);
+  border: 0.5px solid var(--color-primary);
   border-radius: 20px;
   padding: 3px 10px;
 }
 
 /* ================================
-   TOP BAR
-   ================================ */
-.top-bar {
-  width: 100%;
-  height: 3px;
-  background: var(--color-red);
-}
-
-/* ================================
-   CHARACTER SECTION
-   ================================ */
-#character {
-  padding: 64px 48px;
-  border-top: 0.5px solid var(--color-gold);
-}
-
-.character-wrap {
-  max-width: 680px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.kite-boy {
-  width: 100%;
-  max-width: 680px;
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-.character-caption {
-  margin-top: 24px;
-  font-size: 16px;
-  font-style: italic;
-  color: var(--color-muted);
-}
-
-/* ================================
-   KITE ANIMATION
+   NOTES SECTION
    ================================ */
 
-@keyframes kite-bob {
-  0%   { transform: translateY(0px);   }
-  50%  { transform: translateY(-10px); }
-  100% { transform: translateY(0px);   }
-}
-
-.kite-float {
-  animation: kite-bob 3s ease-in-out infinite;
-  transform-box: fill-box;
-  transform-origin: center;
-}
-
-/* ================================
-   SCROLL FADE-IN
-   ================================ */
-
-.fade-in {
-  opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
-.fade-in.visible {
-  opacity: 1;
-  transform: translateY(0px);
-}
-
-/* ================================
-   MOBILE — screens smaller than 600px
-   ================================ */
-
-@media (max-width: 600px) {
-
-  /* Header becomes simpler */
-  header {
-    padding: 16px 24px;
-  }
-
-  nav ul {
-    gap: 16px;
-  }
-
-  /* Hero text gets smaller */
-  #hero {
-    padding: 64px 24px;
-  }
-
-  #hero h1 {
-    font-size: 32px;
-  }
-
-  #hero p {
-    font-size: 16px;
-  }
-
-  /* Character section */
-  #character {
-    padding: 48px 24px;
-  }
-
-  /* Apps section */
-  #apps {
-    padding: 48px 24px;
-  }
-
-  /* App cards stack vertically */
-  .app-grid {
-    grid-template-columns: 1fr;
-  }
-
-  /* Notes section */
-  #notes {
-    padding: 48px 24px;
-  }
-
-  /* About section */
-  #about {
-    padding: 48px 24px;
-  }
-
-  /* Footer */
-  footer {
-    padding: 32px 24px;
-  }
-
-  /* Section headings */
-  #apps h2,
-  #notes h2,
-  #about h2 {
-    font-size: 22px;
-  }
-
-}
-
-/* ================================
-   MOBILE — screens smaller than 600px
-   ================================ */
-
-@media (max-width: 600px) {
-
-  /* Header becomes simpler */
-  header {
-    padding: 16px 24px;
-  }
-
-  nav ul {
-    gap: 16px;
-  }
-
-  /* Hero text gets smaller */
-  #hero {
-    padding: 64px 24px;
-  }
-
-  #hero h1 {
-    font-size: 32px;
-  }
-
-  #hero p {
-    font-size: 16px;
-  }
-
-  /* Character section */
-  #character {
-    padding: 48px 24px;
-  }
-
-  /* Apps section */
-  #apps {
-    padding: 48px 24px;
-  }
-
-  /* App cards stack vertically */
-  .app-grid {
-    grid-template-columns: 1fr;
-  }
-
-  /* Notes section */
-  #notes {
-    padding: 48px 24px;
-  }
-
-  /* About section */
-  #about {
-    padding: 48px 24px;
-  }
-
-  /* Footer */
-  footer {
-    padding: 32px 24px;
-  }
-
-  /* Section headings */
-  #apps h2,
-  #notes h2,
-  #about h2 {
-    font-size: 22px;
-  }
-
-}
-
-/* ================================
-   FOOTER
-   ================================ */
-
-footer {
-  padding: 64px 48px 32px;
+#notes {
+  padding: 80px 48px;
   border-top: 0.5px solid var(--color-earth);
-  margin-top: 48px;
 }
 
-.footer-inner {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 48px;
-}
-
-.footer-logo {
+#notes h2 {
   font-family: 'Playfair Display', serif;
-  font-size: 20px;
+  font-size: 28px;
   font-weight: 600;
   color: var(--color-dark);
-  display: block;
-  margin-bottom: 8px;
+  margin-bottom: 16px;
 }
 
-.footer-tagline {
-  font-size: 13px;
+#notes p {
+  color: var(--color-muted);
   font-style: italic;
+}
+
+/* ================================
+   ABOUT SECTION
+   ================================ */
+
+#about {
+  padding: 80px 48px;
+  border-top: 0.5px solid var(--color-earth);
+  max-width: 640px;
+}
+
+#about h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--color-dark);
+  margin-bottom: 16px;
+}
+
+#about p {
   color: var(--color-muted);
+  font-size: 18px;
+  line-height: 1.8;
 }
 
-.footer-links {
-  display: flex;
-  gap: 32px;
-}
-
-.footer-links a {
-  text-decoration: none;
-  color: var(--color-earth);
-  font-size: 14px;
-  letter-spacing: 0.06em;
-}
-
-.footer-links a:hover {
-  color: var(--color-red);
-}
-
-.footer-bottom {
-  border-top: 0.5px solid var(--color-gold);
-  padding-top: 24px;
-}
-
-.footer-bottom p {
-  font-size: 12px;
-  color: var(--color-muted);
-  letter-spacing: 0.05em;
-}
-
-/* Mobile footer */
-@media (max-width: 600px) {
-  footer {
-    padding: 48px 24px 24px;
-  }
-
-  .footer-inner {
-    flex-direction: column;
-    gap: 32px;
-  }
-
-  .footer-links {
-    gap: 24px;
-  }
-}
 
