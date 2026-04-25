@@ -276,7 +276,7 @@ nav ul a:hover {
 
 .app-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px;
   margin-top: 48px;
 }
@@ -292,6 +292,7 @@ nav ul a:hover {
   text-decoration: none;
   color: var(--color-dark);
   transition: border-color 0.2s ease;
+  min-width: 0;
 }
 
 .app-card:hover {
@@ -302,6 +303,7 @@ nav ul a:hover {
   width: 100%;
   background: #0d1b2a;
   padding: 1.25rem;
+  flex-shrink: 0;
 }
 
 .app-screen-inner {
@@ -341,11 +343,15 @@ nav ul a:hover {
   letter-spacing: 0.05em;
 }
 
-.app-screen-body {
-  padding: 1rem 0.75rem;
+.app-screen {
+  width: 100%;
+  background: #0d1b2a;
+  padding: 1.25rem;
+  flex-shrink: 0;
+  min-height: 180px;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  justify-content: center;
 }
 
 .app-screen-status {
@@ -368,10 +374,13 @@ nav ul a:hover {
   font-size: 11px;
   color: #506070;
   text-align: center;
+  display: flex;
+  justify-content: space-around;
 }
 
 .app-info {
   padding: 1.25rem 1.5rem 1.5rem;
+  flex: 1;
 }
 
 .app-info-top {
@@ -406,6 +415,7 @@ nav ul a:hover {
   border: 0.5px solid var(--color-primary);
   border-radius: 20px;
   padding: 3px 10px;
+  white-space: nowrap;
 }
 
 .app-link {
@@ -596,6 +606,35 @@ footer {
 
 [data-theme="dark"] .note-card {
   background: var(--color-surface);
+}
+
+/* ================================
+   BRISTI CARD SPECIFIC
+   ================================ */
+
+.bristi-dot {
+  background: #2d8a4e;
+}
+
+.bristi-body {
+  background: linear-gradient(160deg, #1a5c30 0%, #0e3d1e 100%);
+}
+
+.bristi-sun {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 0.25rem;
+}
+
+.bristi-status {
+  background: rgba(255,255,255,0.1);
+  color: #ffffff;
+  border-color: rgba(255,255,255,0.2);
+}
+
+.bristi-body .app-screen-row {
+  color: #a8d5b5;
+  justify-content: space-around;
 }
 
 /* ================================
