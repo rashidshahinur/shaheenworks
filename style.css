@@ -406,3 +406,176 @@ nav ul a:hover {
 }
 
 
+/* ================================
+   APP CARD — SCREEN MOCKUP
+   ================================ */
+
+.app-card {
+  flex-direction: column;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.app-screen {
+  width: 100%;
+  background: #0d1b2a;
+  padding: 1.25rem;
+  border-radius: 12px 12px 0 0;
+}
+
+.app-screen-inner {
+  background: #111e2e;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.app-screen-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  background: #0a1520;
+  border-bottom: 0.5px solid #1e3040;
+}
+
+.app-screen-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #0e6a67;
+  flex-shrink: 0;
+}
+
+.app-screen-title {
+  font-size: 12px;
+  color: #7090a8;
+  flex: 1;
+}
+
+.app-screen-live {
+  font-size: 11px;
+  color: #4caf82;
+  letter-spacing: 0.05em;
+}
+
+.app-screen-body {
+  padding: 1rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.app-screen-status {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.app-screen-status.safe {
+  background: rgba(76, 175, 130, 0.12);
+  color: #4caf82;
+  border: 0.5px solid rgba(76, 175, 130, 0.3);
+}
+
+.app-screen-row {
+  font-size: 11px;
+  color: #506070;
+  text-align: center;
+}
+
+.app-info {
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+
+.app-info-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.app-link {
+  font-size: 12px;
+  color: var(--color-primary);
+  margin-top: 0.5rem;
+  display: block;
+  letter-spacing: 0.02em;
+}
+
+/* ================================
+   NOTES GRID
+   ================================ */
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.note-card {
+  background: var(--color-surface);
+  border: 0.5px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.note-text {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--color-text);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.note-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+/* ================================
+   ABOUT TEXT
+   ================================ */
+
+.about-text {
+  font-size: 1.25rem;
+  color: var(--color-muted);
+  line-height: 1.8;
+  max-width: 540px;
+  margin-top: 1.5rem;
+}
+
+/* ================================
+   SECTION EYEBROW + HEADINGS
+   ================================ */
+
+#apps, #notes, #about {
+  padding: 80px 48px;
+  border-top: 0.5px solid var(--color-border);
+}
+
+#apps h2, #notes h2, #about h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--color-dark);
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+#apps .eyebrow, #notes .eyebrow, #about .eyebrow {
+  margin-bottom: 0;
+}
+
+
+
