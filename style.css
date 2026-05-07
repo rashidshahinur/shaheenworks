@@ -454,6 +454,88 @@ nav ul a:hover {
   display: block;
   letter-spacing: 0.02em;
 }
+
+/* ================================
+   APPROACH SECTION
+   ================================ */
+
+#approach {
+  padding: 80px 48px;
+  border-top: 0.5px solid var(--color-border);
+}
+
+#approach h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 600;
+  font-style: normal;
+  color: var(--color-dark);
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+.approach-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.approach-item {
+  background: var(--color-surface);
+  border: 0.5px solid var(--color-border);
+  border-radius: 16px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.approach-item:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+}
+
+.approach-number {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-style: italic;
+  color: var(--color-border);
+  line-height: 1;
+  font-weight: 400;
+}
+
+.approach-item h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  font-style: normal;
+  color: var(--color-dark);
+}
+
+.approach-item p {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: var(--color-muted);
+  line-height: 1.7;
+}
+
+[data-theme="dark"] .approach-item {
+  background: var(--color-surface);
+}
+
+@media (max-width: 768px) {
+  #approach {
+    padding: 48px 24px;
+  }
+
+  .approach-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
 /* ================================
    NOTES SECTION
    ================================ */
