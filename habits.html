@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Habits — Shaheen</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:       #f5f2eb;
+      --surface:  #faf8f3;
+      --border:   #d8d1c6;
+      --text:     #1f1b17;
+      --muted:    #635f59;
+      --teal:     #0e6a67;
+      --teal-dim: rgba(14,106,103,0.12);
+      --teal-soft:rgba(14,106,103,0.25);
+      --red-dim:  rgba(194,55,45,0.10);
+      --red:      #c2372d;
+    }
+
+    [data-theme="dark"] {
+      --bg:       #161412;
+      --surface:  #1d1a17;
+      --border:   #2e2b27;
+      --text:     #ece7de;
+      --muted:    #8a847c;
+      --teal:     #69aca8;
+      --teal-dim: rgba(105,172,168,0.12);
+      --teal-soft:rgba(105,172,168,0.25);
+      --red-dim:  rgba(220,80,70,0.12);
+      --red:      #e05a52;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── LOCK SCREEN ── */
+    #lock-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .lock-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    .lock-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .lock-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+
+    .lock-sub {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 1.75rem;
+    }
+
+    .lock-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      outline: none;
+      margin-bottom: 0.75rem;
+      text-align: center;
+      letter-spacing: 0.1em;
+    }
+
+    .lock-input:focus { border-color: var(--teal); }
+
+    .lock-btn {
+      width: 100%;
+      padding: 0.75rem;
+      background: var(--teal);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .lock-btn:active { opacity: 0.85; }
+
+    .lock-error {
+      margin-top: 0.75rem;
+      font-size: 0.82rem;
+      color: var(--red);
+      min-height: 1.2em;
+    }
+
+    /* ── MAIN APP ── */
+    #app { display: none; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(245,242,235,0.7);
+      border-bottom: 1px solid var(--border);
+      padding: 0.9rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    [data-theme="dark"] header {
+      background: rgba(22,20,18,0.75);
+    }
+
+    .brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+
+    .header-right { display: flex; align-items: center; gap: 10px; }
+
+    .theme-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 5px 9px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    .logout-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .logout-btn:hover { color: var(--red); border-color: var(--red); }
+
+    main {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 4rem;
+    }
+
+    .page-header { margin-bottom: 2rem; }
+
+    .date-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+    }
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .summary {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--teal-dim);
+      border: 1px solid var(--teal-soft);
+      border-radius: 20px;
+      padding: 3px 12px;
+      font-size: 0.8rem;
+      color: var(--teal);
+      margin-top: 0.6rem;
+    }
+
+    /* ── HABIT CARDS ── */
+    .habit-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.25rem; }
+
+    .habit-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: border-color 0.2s;
+    }
+
+    .habit-card.done { border-color: var(--teal-soft); }
+
+    .check-btn {
+      width: 46px;
+      height: 46px;
+      min-width: 46px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: var(--muted);
+      transition: all 0.18s;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .check-btn.done {
+      background: var(--teal);
+      border-color: var(--teal);
+      color: white;
+    }
+
+    .habit-info { flex: 1; min-width: 0; }
+
+    .habit-name {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .streak-row { display: flex; gap: 14px; }
+
+    .s-item {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .s-num { font-size: 0.85rem; font-weight: 500; color: var(--text); }
+    .s-item.cur .s-num { color: var(--teal); }
+
+    .del-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 1.1rem;
+      padding: 6px;
+      opacity: 0.4;
+      -webkit-tap-highlight-color: transparent;
+      line-height: 1;
+    }
+
+    .del-btn:hover { opacity: 1; color: var(--red); }
+
+    /* ── ADD HABIT ── */
+    .add-row {
+      border: 1px dashed var(--border);
+      border-radius: 14px;
+      padding: 0.85rem 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .add-icon { font-size: 1rem; color: var(--muted); }
+
+    .add-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 0.9rem;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+    }
+
+    .add-input::placeholder { color: var(--muted); }
+
+    .add-btn {
+      background: var(--teal);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .add-btn:active { opacity: 0.85; }
+
+    .empty {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    /* ── DELETE CONFIRM ── */
+    .confirm-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .confirm-overlay.open { display: flex; }
+
+    .confirm-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      max-width: 320px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .confirm-msg {
+      font-size: 0.95rem;
+      color: var(--text);
+      margin-bottom: 1.25rem;
+      line-height: 1.6;
+    }
+
+    .confirm-btns { display: flex; gap: 10px; }
+
+    .btn-cancel, .btn-delete {
+      flex: 1;
+      padding: 0.65rem;
+      border-radius: 9px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--border);
+    }
+
+    .btn-cancel { background: var(--surface); color: var(--text); }
+    .btn-delete { background: var(--red); color: white; border-color: var(--red); }
+  </style>
+</head>
+<body>
+
+  <!-- LOCK SCREEN -->
+  <div id="lock-screen">
+    <div class="lock-card">
+      <div class="lock-icon">🔒</div>
+      <h1 class="lock-title">Habits</h1>
+      <p class="lock-sub">Enter your password to continue</p>
+      <input
+        type="password"
+        id="pw-input"
+        class="lock-input"
+        placeholder="Password"
+        autocomplete="current-password"
+      />
+      <button class="lock-btn" onclick="unlock()">Enter</button>
+      <p class="lock-error" id="pw-error"></p>
+    </div>
+  </div>
+
+  <!-- MAIN APP -->
+  <div id="app">
+
+    <header>
+      <span class="brand">Shaheen · Habits</span>
+      <div class="header-right">
+        <button class="theme-btn" id="themeBtn" onclick="toggleTheme()">☀️</button>
+        <button class="logout-btn" onclick="logout()">Lock</button>
+      </div>
+    </header>
+
+    <main>
+      <div class="page-header">
+        <p class="date-label" id="dateLbl"></p>
+        <h1 class="page-title">Habits</h1>
+        <span class="summary" id="summaryChip"></span>
+      </div>
+
+      <div class="habit-list" id="habitList"></div>
+
+      <div class="add-row">
+        <span class="add-icon">＋</span>
+        <input
+          class="add-input"
+          id="addInput"
+          placeholder="Add a new habit…"
+          maxlength="50"
+        />
+        <button class="add-btn" onclick="addHabit()">Add</button>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- DELETE CONFIRM OVERLAY -->
+  <div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-card">
+      <p class="confirm-msg" id="confirmMsg"></p>
+      <div class="confirm-btns">
+        <button class="btn-cancel" onclick="closeConfirm()">Cancel</button>
+        <button class="btn-delete" onclick="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ── CONFIG ─────────────────────────────────────
+    // Change this password to whatever you want
+    const PASSWORD = 'shaheen2026';
+    // ───────────────────────────────────────────────
+
+    const TODAY = new Date().toISOString().split('T')[0];
+    let habits = [];
+    let pendingDeleteId = null;
+
+    // ── LOCK ──────────────────────────────────────
+    function checkAuth() {
+      if (sessionStorage.getItem('habits-auth') === 'yes') {
+        showApp();
+      }
+    }
+
+    function unlock() {
+      const val = document.getElementById('pw-input').value;
+      if (val === PASSWORD) {
+        sessionStorage.setItem('habits-auth', 'yes');
+        document.getElementById('pw-error').textContent = '';
+        showApp();
+      } else {
+        document.getElementById('pw-error').textContent = 'Wrong password. Try again.';
+        document.getElementById('pw-input').value = '';
+        document.getElementById('pw-input').focus();
+      }
+    }
+
+    function logout() {
+      sessionStorage.removeItem('habits-auth');
+      document.getElementById('app').style.display = 'none';
+      document.getElementById('lock-screen').style.display = 'flex';
+      document.getElementById('pw-input').value = '';
+    }
+
+    function showApp() {
+      document.getElementById('lock-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      loadHabits();
+      applyTheme();
+    }
+
+    document.getElementById('pw-input').addEventListener('keydown', e => {
+      if (e.key === 'Enter') unlock();
+    });
+
+    // ── THEME ─────────────────────────────────────
+    function applyTheme() {
+      const t = localStorage.getItem('habits-theme') || 'light';
+      document.documentElement.setAttribute('data-theme', t);
+      document.getElementById('themeBtn').textContent = t === 'dark' ? '🌙' : '☀️';
+    }
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('habits-theme', next);
+      applyTheme();
+    }
+
+    // ── DATA ──────────────────────────────────────
+    function loadHabits() {
+      const raw = localStorage.getItem('shaheen-habits-v1');
+      habits = raw ? JSON.parse(raw) : [];
+      if (!habits.length) {
+        habits = [{ id: '1', name: 'Duolingo', checkins: [] }];
+        saveHabits();
+      }
+      render();
+    }
+
+    function saveHabits() {
+      localStorage.setItem('shaheen-habits-v1', JSON.stringify(habits));
+    }
+
+    // ── STREAK ────────────────────────────────────
+    function calcStreak(checkins) {
+      if (!checkins || !checkins.length) return { current: 0, best: 0 };
+      const set = new Set(checkins);
+
+      // current streak — count back from today (or yesterday if not done today)
+      let current = 0;
+      let d = new Date(TODAY + 'T00:00:00');
+      if (!set.has(TODAY)) d.setDate(d.getDate() - 1);
+      for (let i = 0; i < 730; i++) {
+        const ds = d.toISOString().split('T')[0];
+        if (set.has(ds)) { current++; d.setDate(d.getDate() - 1); }
+        else break;
+      }
+
+      // best streak ever
+      const sorted = [...set].sort();
+      let best = 0, run = 0, prev = null;
+      for (const ds of sorted) {
+        if (!prev) { run = 1; }
+        else {
+          const diff = Math.round(
+            (new Date(ds + 'T00:00:00') - new Date(prev + 'T00:00:00')) / 86400000
+          );
+          run = diff === 1 ? run + 1 : 1;
+        }
+        if (run > best) best = run;
+        prev = ds;
+      }
+      return { current, best };
+    }
+
+    // ── ACTIONS ───────────────────────────────────
+    function toggle(id) {
+      const h = habits.find(x => x.id === id);
+      if (!h) return;
+      h.checkins = h.checkins.includes(TODAY)
+        ? h.checkins.filter(d => d !== TODAY)
+        : [...h.checkins, TODAY];
+      saveHabits();
+      render();
+    }
+
+    function addHabit() {
+      const inp = document.getElementById('addInput');
+      const name = inp.value.trim();
+      if (!name) return;
+      habits.push({ id: Date.now().toString(), name, checkins: [] });
+      inp.value = '';
+      saveHabits();
+      render();
+    }
+
+    let pendingDelete = null;
+
+    function askDelete(id, name) {
+      pendingDelete = id;
+      document.getElementById('confirmMsg').textContent =
+        `Delete "${name}"? All its streak data will be gone.`;
+      document.getElementById('confirmOverlay').classList.add('open');
+    }
+
+    function closeConfirm() {
+      pendingDelete = null;
+      document.getElementById('confirmOverlay').classList.remove('open');
+    }
+
+    function confirmDelete() {
+      if (!pendingDelete) return;
+      habits = habits.filter(h => h.id !== pendingDelete);
+      saveHabits();
+      closeConfirm();
+      render();
+    }
+
+    // ── RENDER ────────────────────────────────────
+    function fmtDate(d) {
+      return new Date(d + 'T00:00:00').toLocaleDateString('en-US', {
+        weekday: 'long', month: 'long', day: 'numeric'
+      });
+    }
+
+    function render() {
+      document.getElementById('dateLbl').textContent = fmtDate(TODAY);
+
+      const doneCount = habits.filter(h => h.checkins.includes(TODAY)).length;
+      document.getElementById('summaryChip').textContent =
+        `${doneCount} / ${habits.length} done today`;
+
+      const list = document.getElementById('habitList');
+
+      if (!habits.length) {
+        list.innerHTML = '<p class="empty">No habits yet — add one below.</p>';
+        return;
+      }
+
+      list.innerHTML = habits.map(h => {
+        const ok = h.checkins.includes(TODAY);
+        const { current, best } = calcStreak(h.checkins);
+        return `
+          <div class="habit-card ${ok ? 'done' : ''}">
+            <button
+              class="check-btn ${ok ? 'done' : ''}"
+              onclick="toggle('${h.id}')"
+              aria-label="${ok ? 'Uncheck' : 'Check'} ${h.name}"
+            >${ok ? '✓' : ''}</button>
+            <div class="habit-info">
+              <div class="habit-name">${h.name}</div>
+              <div class="streak-row">
+                <span class="s-item cur">
+                  🔥 <span class="s-num">${current}</span> streak
+                </span>
+                <span class="s-item">
+                  🏆 <span class="s-num">${best}</span> best
+                </span>
+              </div>
+            </div>
+            <button
+              class="del-btn"
+              onclick="askDelete('${h.id}', '${h.name.replace(/'/g, "\\'")}')"
+              aria-label="Delete ${h.name}"
+            >✕</button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // ── INIT ──────────────────────────────────────
+    document.getElementById('addInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') addHabit();
+    });
+
+    checkAuth();
+  </script>
+
+</body>
+</html>
