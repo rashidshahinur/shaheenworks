@@ -7,6 +7,9 @@
   <meta name="robots" content="noindex, nofollow">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
+  <!-- Sortable.js — handles drag & drop + touch reordering, no npm needed -->
+  <script src="https://unpkg.com/sortablejs@1.15.2/Sortable.min.js"></script>
+
   <style>
     /* ══════════════════════════════════
        VARIABLES
@@ -39,9 +42,6 @@
       --red:      #d95f55;
     }
 
-    /* ══════════════════════════════════
-       RESET
-    ══════════════════════════════════ */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
@@ -55,8 +55,7 @@
     /* ══════════════════════════════════
        LOCK & SETUP SCREENS
     ══════════════════════════════════ */
-    #setup,
-    #lock {
+    #setup, #lock {
       min-height: 100vh;
       display: none;
       align-items: center;
@@ -64,17 +63,9 @@
       padding: 2rem;
     }
 
-    .lock-box {
-      width: 100%;
-      max-width: 320px;
-      text-align: center;
-    }
+    .lock-box { width: 100%; max-width: 320px; text-align: center; }
 
-    .lock-emoji {
-      font-size: 3rem;
-      display: block;
-      margin-bottom: 1.4rem;
-    }
+    .lock-emoji { font-size: 3rem; display: block; margin-bottom: 1.4rem; }
 
     .lock-title {
       font-family: 'Playfair Display', serif;
@@ -84,11 +75,7 @@
       margin-bottom: 0.25rem;
     }
 
-    .lock-hint {
-      font-size: 0.78rem;
-      color: var(--muted);
-      margin-bottom: 2rem;
-    }
+    .lock-hint { font-size: 0.78rem; color: var(--muted); margin-bottom: 2rem; }
 
     .lock-input {
       width: 100%;
@@ -123,14 +110,8 @@
     }
 
     .lock-btn:active { opacity: 0.82; }
+    .lock-err { font-size: 0.78rem; color: var(--red); min-height: 1.1em; }
 
-    .lock-err {
-      font-size: 0.78rem;
-      color: var(--red);
-      min-height: 1.1em;
-    }
-
-    /* Small link under login form */
     .lock-link {
       display: inline-block;
       margin-top: 1.25rem;
@@ -147,7 +128,7 @@
     .lock-link:hover { color: var(--teal); }
 
     /* ══════════════════════════════════
-       CHANGE PASSWORD MODAL
+       MODALS / OVERLAYS
     ══════════════════════════════════ */
     .overlay {
       display: none;
@@ -193,13 +174,7 @@
     }
 
     .sheet-input:focus { border-color: var(--teal); }
-
-    .sheet-err {
-      font-size: 0.78rem;
-      color: var(--red);
-      min-height: 1em;
-      margin-bottom: 0.75rem;
-    }
+    .sheet-err { font-size: 0.78rem; color: var(--red); min-height: 1em; margin-bottom: 0.75rem; }
 
     .sheet-btns { display: flex; gap: 10px; }
 
@@ -218,7 +193,7 @@
     .btn-del    { background: var(--red);  color: #fff; border: none; }
 
     /* ══════════════════════════════════
-       APP SHELL
+       APP HEADER
     ══════════════════════════════════ */
     #app { display: none; }
 
@@ -269,15 +244,9 @@
       padding: 2.5rem 1.25rem 5rem;
     }
 
-    /* Greeting */
     .greeting { margin-bottom: 2rem; }
 
-    .greeting-line {
-      font-size: 0.78rem;
-      color: var(--muted);
-      letter-spacing: 0.04em;
-      margin-bottom: 0.2rem;
-    }
+    .greeting-line { font-size: 0.78rem; color: var(--muted); letter-spacing: 0.04em; margin-bottom: 0.2rem; }
 
     .greeting-date {
       font-family: 'Playfair Display', serif;
@@ -287,7 +256,7 @@
       color: var(--text);
     }
 
-    /* Progress card */
+    /* Progress */
     .prog-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -296,38 +265,13 @@
       margin-bottom: 1.75rem;
     }
 
-    .prog-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 0.65rem;
-    }
-
-    .prog-label {
-      font-size: 0.72rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-    }
-
+    .prog-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.65rem; }
+    .prog-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; }
     .prog-frac { font-size: 1rem; font-weight: 500; color: var(--text); }
     .prog-frac b { color: var(--teal); font-weight: 500; }
-
     .track { height: 4px; background: var(--surf2); border-radius: 99px; overflow: hidden; }
-
-    .fill {
-      height: 100%;
-      background: var(--teal);
-      border-radius: 99px;
-      transition: width 0.45s cubic-bezier(0.25, 0.8, 0.25, 1);
-    }
-
-    .done-msg {
-      margin-top: 0.55rem;
-      font-size: 0.76rem;
-      color: var(--teal);
-      display: none;
-    }
+    .fill { height: 100%; background: var(--teal); border-radius: 99px; transition: width 0.45s cubic-bezier(0.25, 0.8, 0.25, 1); }
+    .done-msg { margin-top: 0.55rem; font-size: 0.76rem; color: var(--teal); display: none; }
 
     /* Month navigator */
     .month-nav {
@@ -365,7 +309,7 @@
     }
 
     /* ══════════════════════════════════
-       HABIT GRID  ← the big change
+       HABIT GRID
     ══════════════════════════════════ */
     .habit-grid {
       display: grid;
@@ -374,7 +318,6 @@
       margin-bottom: 1rem;
     }
 
-    /* 1 column on small screens */
     @media (max-width: 600px) {
       .habit-grid { grid-template-columns: 1fr; }
     }
@@ -387,27 +330,58 @@
       border: 1px solid var(--border);
       border-radius: 18px;
       overflow: hidden;
-      transition: border-color 0.25s;
+      transition: border-color 0.25s, box-shadow 0.25s;
     }
 
     .habit-card.checked { border-color: var(--teal-18); }
 
-    /* Top row inside card */
+    /* ── DRAG STATES ── */
+
+    /* The card being dragged — lifted look */
+    .habit-card.sortable-chosen {
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+      border-color: var(--teal-45) !important;
+      cursor: grabbing;
+    }
+
+    /* The ghost placeholder left behind */
+    .habit-card.sortable-ghost {
+      opacity: 0.3;
+      border-style: dashed;
+    }
+
+    /* Card top row */
     .card-top {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 0.9rem 1rem;
+      gap: 8px;
+      padding: 0.9rem 0.9rem;
       border-bottom: 1px solid var(--border);
     }
 
     .habit-card.checked .card-top { border-bottom-color: var(--teal-18); }
 
-    /* Circle button — shows emoji when unchecked, ✓ when done */
+    /* ── DRAG HANDLE ── */
+    .drag-handle {
+      font-size: 1rem;
+      color: var(--border);
+      cursor: grab;
+      padding: 4px 3px;
+      line-height: 1;
+      user-select: none;
+      -webkit-user-select: none;
+      flex-shrink: 0;
+      transition: color 0.15s;
+    }
+
+    .drag-handle:hover { color: var(--muted); }
+    .drag-handle:active { cursor: grabbing; }
+
+    /* Check button */
     .check-btn {
-      width: 40px;
-      height: 40px;
-      min-width: 40px;
+      width: 38px;
+      height: 38px;
+      min-width: 38px;
       border-radius: 50%;
       border: 1.5px solid var(--border);
       background: transparent;
@@ -415,27 +389,24 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.2rem;    /* emoji size */
+      font-size: 1.15rem;
       transition: all 0.2s;
       -webkit-tap-highlight-color: transparent;
+      flex-shrink: 0;
     }
 
-    .check-btn:hover:not(.done) {
-      border-color: var(--teal);
-      background: var(--teal-08);
-    }
+    .check-btn:hover:not(.done) { border-color: var(--teal); background: var(--teal-08); }
 
-    /* When checked: teal fill, white ✓ */
     .check-btn.done {
       background: var(--teal);
       border-color: var(--teal);
       color: white;
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
 
     .habit-name {
       flex: 1;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       font-weight: 500;
       color: var(--text);
       white-space: nowrap;
@@ -443,27 +414,19 @@
       text-overflow: ellipsis;
     }
 
-    /* Streak */
-    .streak-col {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-width: 38px;
-    }
+    .streak-col { display: flex; flex-direction: column; align-items: center; min-width: 36px; }
 
     .streak-num {
       font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       font-weight: 600;
       line-height: 1;
       color: var(--teal);
     }
 
-    .streak-num.zero { color: var(--muted); font-size: 1.1rem; }
+    .streak-num.zero { color: var(--muted); font-size: 1rem; }
+    .streak-unit { font-size: 0.58rem; color: var(--muted); margin-top: 2px; letter-spacing: 0.04em; }
 
-    .streak-unit { font-size: 0.6rem; color: var(--muted); margin-top: 2px; letter-spacing: 0.04em; }
-
-    /* Delete */
     .del-btn {
       background: none;
       border: none;
@@ -475,6 +438,7 @@
       line-height: 1;
       -webkit-tap-highlight-color: transparent;
       transition: opacity 0.15s, color 0.15s;
+      flex-shrink: 0;
     }
 
     .del-btn:hover { opacity: 1; color: var(--red); }
@@ -484,19 +448,9 @@
     ══════════════════════════════════ */
     .cal-wrap { padding: 0.85rem 0.9rem 1rem; }
 
-    .cal-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 3px;
-    }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3px; }
 
-    .cal-hdr {
-      font-size: 0.64rem;
-      color: var(--muted);
-      text-align: center;
-      padding: 2px 0 5px;
-      letter-spacing: 0.03em;
-    }
+    .cal-hdr { font-size: 0.63rem; color: var(--muted); text-align: center; padding: 2px 0 5px; letter-spacing: 0.02em; }
 
     .cal-cell {
       aspect-ratio: 1;
@@ -504,7 +458,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.68rem;
+      font-size: 0.67rem;
       color: var(--muted);
       cursor: pointer;
       user-select: none;
@@ -512,36 +466,29 @@
       transition: background 0.15s, color 0.15s;
     }
 
-    .cal-cell:not(.empty):not(.future):hover {
-      background: var(--teal-08);
-      color: var(--teal);
-    }
+    .cal-cell:not(.empty):not(.future):hover { background: var(--teal-08); color: var(--teal); }
+    .cal-cell.empty  { cursor: default; }
+    .cal-cell.future { color: var(--border); cursor: default; }
 
-    .cal-cell.empty   { cursor: default; }
-    .cal-cell.future  { color: var(--border); cursor: default; }
-
-    /* Today — teal ring */
     .cal-cell.today {
       font-weight: 600;
       color: var(--teal);
       box-shadow: inset 0 0 0 1.5px var(--teal);
     }
 
-    /* Done — teal fill, white ✕ */
     .cal-cell.done {
       background: var(--teal);
       color: #fff;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       font-weight: 600;
     }
 
-    /* Done + today — outer ring */
     .cal-cell.done.today {
       box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--teal);
     }
 
     /* ══════════════════════════════════
-       ADD HABIT ROW
+       ADD HABIT
     ══════════════════════════════════ */
     .add-row {
       border: 1px dashed var(--border);
@@ -554,7 +501,6 @@
     }
 
     .add-row:focus-within { border-color: var(--teal-45); }
-
     .add-plus { font-size: 1rem; color: var(--muted); }
 
     .add-input {
@@ -584,7 +530,6 @@
 
     .add-btn:active { opacity: 0.82; }
 
-    /* Empty state */
     .empty-state { font-size: 0.82rem; color: var(--muted); padding: 0.5rem 0 1rem; }
   </style>
 </head>
@@ -592,7 +537,7 @@
 
 
 <!-- ══════════════════════════════════════════
-     FIRST-TIME SETUP  (shown when no password saved)
+     FIRST-TIME SETUP
 ══════════════════════════════════════════ -->
 <div id="setup">
   <div class="lock-box">
@@ -608,7 +553,7 @@
 
 
 <!-- ══════════════════════════════════════════
-     LOCK SCREEN  (shown when password already set)
+     LOCK SCREEN
 ══════════════════════════════════════════ -->
 <div id="lock">
   <div class="lock-box">
@@ -640,7 +585,7 @@
 
     <div class="greeting">
       <p class="greeting-line" id="greetLine"></p>
-      <p class="greeting-date" id="greetDate"></p>
+      <p class="greeting-date"  id="greetDate"></p>
     </div>
 
     <div class="prog-card">
@@ -648,9 +593,7 @@
         <span class="prog-label">Today</span>
         <span class="prog-frac"><b id="doneCount">0</b> of <span id="totalCount">0</span> done</span>
       </div>
-      <div class="track">
-        <div class="fill" id="progressFill" style="width: 0%"></div>
-      </div>
+      <div class="track"><div class="fill" id="progressFill" style="width:0%"></div></div>
       <p class="done-msg" id="doneMsg">✦ All done for today — keep it up.</p>
     </div>
 
@@ -660,6 +603,7 @@
       <button class="month-nav-btn" onclick="nextMonth()">→</button>
     </div>
 
+    <!-- Habit cards render here -->
     <div class="habit-grid" id="habitGrid"></div>
 
     <div class="add-row">
@@ -695,7 +639,7 @@
 ══════════════════════════════════════════ -->
 <div class="overlay" id="confirmOverlay">
   <div class="sheet">
-    <p class="sheet-title" id="confirmMsg" style="font-family:'Inter',sans-serif; font-size:0.9rem; font-weight:400; line-height:1.65; margin-bottom:1.2rem;"></p>
+    <p id="confirmMsg" style="font-size:0.9rem; line-height:1.65; margin-bottom:1.2rem; color:var(--text);"></p>
     <div class="sheet-btns">
       <button class="btn-cancel" onclick="closeConfirm()">Keep it</button>
       <button class="btn-del"    onclick="doDelete()">Delete</button>
@@ -709,10 +653,10 @@
   /* ══════════════════════════════════
      CONSTANTS
   ══════════════════════════════════ */
-  const STORAGE_PW      = 'h-password';   // where password lives in localStorage
-  const STORAGE_HABITS  = 'shaheen-habits-v1';
-  const STORAGE_THEME   = 'h-theme';
-  const SESSION_AUTH    = 'h-auth';
+  const STORAGE_PW     = 'h-password';
+  const STORAGE_HABITS = 'shaheen-habits-v1';
+  const STORAGE_THEME  = 'h-theme';
+  const SESSION_AUTH   = 'h-auth';
 
   const MONTH_NAMES = [
     'January','February','March','April','May','June',
@@ -724,7 +668,7 @@
      HELPERS
   ══════════════════════════════════ */
 
-  // Use LOCAL date — avoids UTC timezone issues (important for Bangladesh, UTC+6)
+  // Local date string — avoids UTC timezone issues (important for Bangladesh UTC+6)
   function localDateStr(date) {
     const d = date || new Date();
     return d.getFullYear()
@@ -736,44 +680,38 @@
 
 
   /* ══════════════════════════════════
-     AUTO EMOJI
-     Detects an emoji from the habit name.
-     You can extend this list as you add habits.
+     AUTO EMOJI  (extend this list as you add habits)
   ══════════════════════════════════ */
   function getEmoji(name) {
     const n = name.toLowerCase();
-
-    if (n.includes('duolingo') || n.includes('language'))            return '🦉';
-    if (n.includes('dumble') || n.includes('dumbbell'))              return '🏋️';
+    if (n.includes('duolingo') || n.includes('language'))                          return '🦉';
+    if (n.includes('dumble') || n.includes('dumbbell'))                            return '🏋️';
     if (n.includes('gym') || n.includes('workout') || n.includes('exercise') || n.includes('pushup')) return '💪';
-    if (n.includes('run') || n.includes('jog'))                      return '🏃';
-    if (n.includes('walk'))                                          return '🚶';
-    if (n.includes('swim'))                                          return '🏊';
-    if (n.includes('yoga') || n.includes('stretch'))                 return '🧘';
-    if (n.includes('medit'))                                         return '🧘';
-    if (n.includes('read') || n.includes('book'))                    return '📚';
-    if (n.includes('write') || n.includes('journal') || n.includes('diary')) return '✍️';
-    if (n.includes('water') || n.includes('drink'))                  return '💧';
-    if (n.includes('sleep') || n.includes('bed'))                    return '😴';
-    if (n.includes('pray') || n.includes('namaz') || n.includes('salah')) return '🤲';
-    if (n.includes('morning'))                                       return '🌅';
-    if (n.includes('night') || n.includes('evening'))                return '🌙';
-    if (n.includes('code') || n.includes('program') || n.includes('coding')) return '💻';
+    if (n.includes('run') || n.includes('jog'))                                    return '🏃';
+    if (n.includes('walk'))                                                        return '🚶';
+    if (n.includes('swim'))                                                        return '🏊';
+    if (n.includes('yoga') || n.includes('stretch') || n.includes('medit'))       return '🧘';
+    if (n.includes('read') || n.includes('book'))                                  return '📚';
+    if (n.includes('write') || n.includes('journal') || n.includes('diary'))      return '✍️';
+    if (n.includes('water') || n.includes('drink'))                               return '💧';
+    if (n.includes('sleep') || n.includes('bed'))                                 return '😴';
+    if (n.includes('pray') || n.includes('namaz') || n.includes('salah'))         return '🤲';
+    if (n.includes('morning'))                                                     return '🌅';
+    if (n.includes('night') || n.includes('evening'))                             return '🌙';
+    if (n.includes('code') || n.includes('program') || n.includes('coding'))      return '💻';
     if (n.includes('music') || n.includes('guitar') || n.includes('piano') || n.includes('sing')) return '🎵';
-    if (n.includes('cook') || n.includes('food'))                    return '🍳';
-    if (n.includes('vitamin') || n.includes('medicine') || n.includes('pill')) return '💊';
-    if (n.includes('fast') || n.includes('fasting'))                 return '⏱️';
-    if (n.includes('diet') || n.includes('sugar') || n.includes('healthy')) return '🥗';
-    if (n.includes('study') || n.includes('learn'))                  return '📖';
-    if (n.includes('gratitude') || n.includes('thank'))              return '🙏';
-    if (n.includes('cold') || n.includes('shower'))                  return '🚿';
-    if (n.includes('breath'))                                        return '🫁';
-    if (n.includes('draw') || n.includes('sketch') || n.includes('paint')) return '🎨';
-    if (n.includes('photo'))                                         return '📷';
-    if (n.includes('call') || n.includes('phone'))                   return '📞';
-    if (n.includes('no phone') || n.includes('screen'))              return '📵';
-
-    return '✨'; // default
+    if (n.includes('cook') || n.includes('food'))                                 return '🍳';
+    if (n.includes('vitamin') || n.includes('medicine') || n.includes('pill'))    return '💊';
+    if (n.includes('fast') || n.includes('fasting'))                              return '⏱️';
+    if (n.includes('diet') || n.includes('sugar') || n.includes('healthy'))       return '🥗';
+    if (n.includes('study') || n.includes('learn'))                               return '📖';
+    if (n.includes('gratitude') || n.includes('thank'))                           return '🙏';
+    if (n.includes('cold') || n.includes('shower'))                               return '🚿';
+    if (n.includes('breath'))                                                      return '🫁';
+    if (n.includes('draw') || n.includes('sketch') || n.includes('paint'))        return '🎨';
+    if (n.includes('photo'))                                                       return '📷';
+    if (n.includes('no phone') || n.includes('screen'))                           return '📵';
+    return '✨';
   }
 
 
@@ -782,41 +720,34 @@
   ══════════════════════════════════ */
   let habits        = [];
   let pendingDelete = null;
+  let sortableInstance = null;
 
-  const nowDate  = new Date();
-  let viewYear   = nowDate.getFullYear();
-  let viewMonth  = nowDate.getMonth();   // 0-indexed
+  const nowDate = new Date();
+  let viewYear  = nowDate.getFullYear();
+  let viewMonth = nowDate.getMonth();
 
 
   /* ══════════════════════════════════
-     AUTH — PASSWORD LIVES IN localStorage
-     The code never contains the password.
+     AUTH  — password lives in localStorage, never in code
   ══════════════════════════════════ */
   function initAuth() {
-    const savedPw = localStorage.getItem(STORAGE_PW);
-
-    if (!savedPw) {
-      // First time — show setup screen
+    const saved = localStorage.getItem(STORAGE_PW);
+    if (!saved) {
       document.getElementById('setup').style.display = 'flex';
     } else if (sessionStorage.getItem(SESSION_AUTH) === '1') {
-      // Already logged in this session
       showApp();
     } else {
-      // Has password, needs to log in
       document.getElementById('lock').style.display = 'flex';
     }
   }
 
-  // First-time setup: save new password
   function saveNewPassword() {
     const pw1 = document.getElementById('setupPw1').value;
     const pw2 = document.getElementById('setupPw2').value;
     const err = document.getElementById('setupErr');
-
-    if (!pw1) { err.textContent = 'Please enter a password.'; return; }
-    if (pw1 !== pw2) { err.textContent = 'Passwords do not match.'; return; }
-    if (pw1.length < 4) { err.textContent = 'At least 4 characters please.'; return; }
-
+    if (!pw1)          { err.textContent = 'Please enter a password.'; return; }
+    if (pw1 !== pw2)   { err.textContent = 'Passwords do not match.'; return; }
+    if (pw1.length < 4){ err.textContent = 'At least 4 characters please.'; return; }
     localStorage.setItem(STORAGE_PW, pw1);
     sessionStorage.setItem(SESSION_AUTH, '1');
     document.getElementById('setup').style.display = 'none';
@@ -824,12 +755,10 @@
     showApp();
   }
 
-  // Unlock with saved password
   function unlock() {
     const entered = document.getElementById('pwInput').value;
     const saved   = localStorage.getItem(STORAGE_PW);
     const err     = document.getElementById('pwErr');
-
     if (entered === saved) {
       sessionStorage.setItem(SESSION_AUTH, '1');
       err.textContent = '';
@@ -842,16 +771,14 @@
     }
   }
 
-  // Lock the app
   function logout() {
     sessionStorage.removeItem(SESSION_AUTH);
     document.getElementById('app').style.display  = 'none';
     document.getElementById('lock').style.display = 'flex';
-    document.getElementById('pwInput').value      = '';
-    document.getElementById('pwErr').textContent  = '';
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwErr').textContent = '';
   }
 
-  // Show main app
   function showApp() {
     document.getElementById('lock').style.display = 'none';
     document.getElementById('app').style.display  = 'block';
@@ -860,7 +787,6 @@
     loadHabits();
   }
 
-  // Keyboard: press Enter on lock inputs
   document.getElementById('setupPw2').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') saveNewPassword();
   });
@@ -891,12 +817,10 @@
     const new2    = document.getElementById('cpNew2').value;
     const err     = document.getElementById('cpErr');
     const saved   = localStorage.getItem(STORAGE_PW);
-
-    if (current !== saved) { err.textContent = 'Current password is wrong.'; return; }
-    if (!new1)             { err.textContent = 'Enter a new password.'; return; }
-    if (new1 !== new2)     { err.textContent = 'New passwords do not match.'; return; }
-    if (new1.length < 4)   { err.textContent = 'At least 4 characters please.'; return; }
-
+    if (current !== saved)    { err.textContent = 'Current password is wrong.'; return; }
+    if (!new1)                { err.textContent = 'Enter a new password.'; return; }
+    if (new1 !== new2)        { err.textContent = 'New passwords do not match.'; return; }
+    if (new1.length < 4)      { err.textContent = 'At least 4 characters please.'; return; }
     localStorage.setItem(STORAGE_PW, new1);
     err.textContent = '';
     closeChangePw();
@@ -925,7 +849,6 @@
   function setGreeting() {
     const hour  = new Date().getHours();
     const greet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-
     document.getElementById('greetLine').textContent = greet + ', Shaheen.';
     document.getElementById('greetDate').textContent = new Date().toLocaleDateString('en-US', {
       weekday: 'long', month: 'long', day: 'numeric'
@@ -937,14 +860,12 @@
      MONTH NAVIGATION
   ══════════════════════════════════ */
   function prevMonth() {
-    if (viewMonth === 0) { viewMonth = 11; viewYear--; }
-    else viewMonth--;
+    if (viewMonth === 0) { viewMonth = 11; viewYear--; } else viewMonth--;
     render();
   }
 
   function nextMonth() {
-    if (viewMonth === 11) { viewMonth = 0; viewYear++; }
-    else viewMonth++;
+    if (viewMonth === 11) { viewMonth = 0; viewYear++; } else viewMonth++;
     render();
   }
 
@@ -954,16 +875,11 @@
   ══════════════════════════════════ */
   function getStreak(checkins) {
     if (!checkins || checkins.length === 0) return 0;
-
     const set    = new Set(checkins);
     let   count  = 0;
     const cursor = new Date();
     cursor.setHours(0, 0, 0, 0);
-
-    // If today is not done, start from yesterday
-    // (streak doesn't break just because you haven't checked yet today)
     if (!set.has(TODAY)) cursor.setDate(cursor.getDate() - 1);
-
     for (let i = 0; i < 730; i++) {
       const ds = localDateStr(cursor);
       if (set.has(ds)) { count++; cursor.setDate(cursor.getDate() - 1); }
@@ -977,13 +893,9 @@
      CALENDAR RENDERER
   ══════════════════════════════════ */
   function renderCalendar(habit) {
-    const set = new Set(habit.checkins);
-
-    // Which weekday is the 1st? (0=Sun … 6=Sat)
+    const set         = new Set(habit.checkins);
     const firstDayJS  = new Date(viewYear, viewMonth, 1).getDay();
-    // Convert to Monday-first offset
     const startOffset = firstDayJS === 0 ? 6 : firstDayJS - 1;
-
     const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
 
     const todayObj   = new Date();
@@ -993,17 +905,14 @@
 
     let html = '<div class="cal-grid">';
 
-    // Headers
     ['M','T','W','T','F','S','S'].forEach(function(l) {
       html += '<div class="cal-hdr">' + l + '</div>';
     });
 
-    // Empty leading cells
     for (let i = 0; i < startOffset; i++) {
       html += '<div class="cal-cell empty"></div>';
     }
 
-    // Day cells
     for (let d = 1; d <= daysInMonth; d++) {
       const ds = viewYear
         + '-' + String(viewMonth + 1).padStart(2, '0')
@@ -1021,10 +930,7 @@
       if (isToday)  cls += ' today';
       if (isFuture) cls += ' future';
 
-      const click = isFuture
-        ? ''
-        : 'onclick="toggleDate(\'' + habit.id + '\',\'' + ds + '\')"';
-
+      const click = isFuture ? '' : 'onclick="toggleDate(\'' + habit.id + '\',\'' + ds + '\')"';
       const label = isDone ? '✕' : d;
 
       html += '<div class="' + cls + '" ' + click + '>' + label + '</div>';
@@ -1036,12 +942,52 @@
 
 
   /* ══════════════════════════════════
+     DRAG TO REORDER  (Sortable.js)
+  ══════════════════════════════════ */
+  function initSortable() {
+    // Destroy old instance if it exists (render() replaces innerHTML)
+    if (sortableInstance) {
+      sortableInstance.destroy();
+      sortableInstance = null;
+    }
+
+    const grid = document.getElementById('habitGrid');
+
+    sortableInstance = Sortable.create(grid, {
+      // Only drag from the handle icon — calendar clicks still work
+      handle: '.drag-handle',
+
+      // Smooth animation when cards snap into place
+      animation: 200,
+
+      // CSS classes added by Sortable during drag
+      ghostClass:  'sortable-ghost',   // the empty placeholder left behind
+      chosenClass: 'sortable-chosen',  // the card being dragged
+
+      // Works on mobile touch too
+      forceFallback: false,
+
+      // After drop: update habits array order and save
+      onEnd: function(evt) {
+        if (evt.oldIndex === evt.newIndex) return; // no change
+
+        // Move the habit in the array to match the new visual order
+        const moved = habits.splice(evt.oldIndex, 1)[0];
+        habits.splice(evt.newIndex, 0, moved);
+        saveHabits();
+
+        // No need to call render() — Sortable already moved the DOM
+      }
+    });
+  }
+
+
+  /* ══════════════════════════════════
      DATA
   ══════════════════════════════════ */
   function loadHabits() {
     const raw = localStorage.getItem(STORAGE_HABITS);
     habits = raw ? JSON.parse(raw) : [];
-
     if (habits.length === 0) {
       habits = [{ id: '1', name: 'Duolingo', checkins: [] }];
       saveHabits();
@@ -1057,20 +1003,16 @@
   /* ══════════════════════════════════
      ACTIONS
   ══════════════════════════════════ */
-  function toggleToday(id) {
-    toggleDate(id, TODAY);
-  }
+  function toggleToday(id) { toggleDate(id, TODAY); }
 
   function toggleDate(id, ds) {
     const habit = habits.find(function(h) { return h.id === id; });
     if (!habit) return;
-
     if (habit.checkins.includes(ds)) {
       habit.checkins = habit.checkins.filter(function(d) { return d !== ds; });
     } else {
       habit.checkins.push(ds);
     }
-
     saveHabits();
     render();
   }
@@ -1079,7 +1021,6 @@
     const input = document.getElementById('addInput');
     const name  = input.value.trim();
     if (!name) return;
-
     habits.push({ id: Date.now().toString(), name: name, checkins: [] });
     input.value = '';
     saveHabits();
@@ -1115,16 +1056,12 @@
      RENDER
   ══════════════════════════════════ */
   function render() {
-    // Month label
     document.getElementById('monthLabel').textContent =
       MONTH_NAMES[viewMonth] + ' ' + viewYear;
 
-    // Progress
-    const doneToday = habits.filter(function(h) {
-      return h.checkins.includes(TODAY);
-    }).length;
-    const total = habits.length;
-    const pct   = total > 0 ? Math.round((doneToday / total) * 100) : 0;
+    const doneToday = habits.filter(function(h) { return h.checkins.includes(TODAY); }).length;
+    const total     = habits.length;
+    const pct       = total > 0 ? Math.round((doneToday / total) * 100) : 0;
 
     document.getElementById('doneCount').textContent    = doneToday;
     document.getElementById('totalCount').textContent   = total;
@@ -1132,7 +1069,6 @@
     document.getElementById('doneMsg').style.display    =
       (doneToday === total && total > 0) ? 'block' : 'none';
 
-    // Habit grid
     const grid = document.getElementById('habitGrid');
 
     if (habits.length === 0) {
@@ -1148,31 +1084,28 @@
       const safeName    = h.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
 
       return (
-        '<div class="habit-card ' + (isTodayDone ? 'checked' : '') + '">' +
+        '<div class="habit-card ' + (isTodayDone ? 'checked' : '') + '" data-id="' + h.id + '">' +
 
           '<div class="card-top">' +
 
-            // Circle button: shows emoji (unchecked) or ✓ (checked)
+            // ⠿ drag handle — grab this to reorder
+            '<span class="drag-handle" title="Drag to reorder">⠿</span>' +
+
+            // Circle: shows emoji when not done, ✓ when done today
             '<button' +
-            '  class="check-btn ' + (isTodayDone ? 'done' : '') + '"' +
-            '  onclick="toggleToday(\'' + h.id + '\')"' +
-            '  aria-label="' + (isTodayDone ? 'Uncheck' : 'Check') + ' ' + h.name + '"' +
+            ' class="check-btn ' + (isTodayDone ? 'done' : '') + '"' +
+            ' onclick="toggleToday(\'' + h.id + '\')"' +
+            ' aria-label="' + (isTodayDone ? 'Uncheck' : 'Check') + ' ' + h.name + '"' +
             '>' + (isTodayDone ? '✓' : emoji) + '</button>' +
 
             '<span class="habit-name">' + h.name + '</span>' +
 
             '<div class="streak-col">' +
-              '<span class="streak-num ' + (streak === 0 ? 'zero' : '') + '">' +
-                (streak === 0 ? '—' : streak) +
-              '</span>' +
+              '<span class="streak-num ' + (streak === 0 ? 'zero' : '') + '">' + (streak === 0 ? '—' : streak) + '</span>' +
               '<span class="streak-unit">' + unit + '</span>' +
             '</div>' +
 
-            '<button' +
-            '  class="del-btn"' +
-            '  onclick="askDelete(\'' + h.id + '\', \'' + safeName + '\')"' +
-            '  aria-label="Delete ' + h.name + '"' +
-            '>✕</button>' +
+            '<button class="del-btn" onclick="askDelete(\'' + h.id + '\', \'' + safeName + '\')" aria-label="Delete">✕</button>' +
 
           '</div>' +
 
@@ -1181,6 +1114,9 @@
         '</div>'
       );
     }).join('');
+
+    // Re-init Sortable after every render (innerHTML replacement resets the DOM)
+    initSortable();
   }
 
 
