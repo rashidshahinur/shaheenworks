@@ -512,3 +512,32 @@ main {
 
 .add-btn:active { opacity: 0.82; }
 .empty-state { font-size: 0.82rem; color: var(--muted); padding: 0.5rem 0 1rem; }
+
+
+/* Weight tracker */
+.weight-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.weight-input-row .sheet-input {
+  text-align: center;
+  font-size: 1.3rem;
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 0;
+}
+
+.weight-kg-label {
+  font-size: 1rem;
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+.cal-cell.weight-entry {
+  background: var(--teal-08);
+  color: var(--teal);
+  font-size: 0.52rem;
+  font-weight: 500;
+}

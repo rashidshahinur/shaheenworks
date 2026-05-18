@@ -15,8 +15,6 @@ const MONTH_NAMES = [
 /* ══════════════════════════════════
    HELPERS
 ══════════════════════════════════ */
-
-// Local date string — avoids UTC timezone issues (important for Bangladesh UTC+6)
 function localDateStr(date) {
   const d = date || new Date();
   return d.getFullYear()
@@ -29,7 +27,6 @@ const TODAY = localDateStr();
 
 /* ══════════════════════════════════
    AUTO EMOJI
-   Add more keywords here as you add new habits.
 ══════════════════════════════════ */
 function getEmoji(name) {
   const n = name.toLowerCase();
@@ -60,6 +57,7 @@ function getEmoji(name) {
   if (n.includes('draw') || n.includes('sketch') || n.includes('paint'))        return '🎨';
   if (n.includes('photo'))                                                       return '📷';
   if (n.includes('no phone') || n.includes('screen'))                           return '📵';
+  if (n.includes('weight'))                                                      return '⚖️';
   return '✨';
 }
 
@@ -77,7 +75,7 @@ let viewMonth = nowDate.getMonth();
 
 
 /* ══════════════════════════════════
-   AUTH — password lives in localStorage, never in code
+   AUTH
 ══════════════════════════════════ */
 function initAuth() {
   const saved = localStorage.getItem(STORAGE_PW);
@@ -239,7 +237,7 @@ function getStreak(checkins) {
 
 
 /* ══════════════════════════════════
-   CALENDAR RENDERER
+   HABIT CALENDAR RENDERER
 ══════════════════════════════════ */
 function renderCalendar(habit) {
   const set         = new Set(habit.checkins);
@@ -253,41 +251,125 @@ function renderCalendar(habit) {
   const todayDate  = todayObj.getDate();
 
   let html = '<div class="cal-grid">';
-
   ['M','T','W','T','F','S','S'].forEach(function(l) {
     html += '<div class="cal-hdr">' + l + '</div>';
   });
-
   for (let i = 0; i < startOffset; i++) {
     html += '<div class="cal-cell empty"></div>';
   }
-
   for (let d = 1; d <= daysInMonth; d++) {
-    const ds = viewYear
-      + '-' + String(viewMonth + 1).padStart(2, '0')
-      + '-' + String(d).padStart(2, '0');
-
+    const ds = viewYear + '-' + String(viewMonth + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
     const isDone  = set.has(ds);
     const isToday = (viewYear === todayYear && viewMonth === todayMonth && d === todayDate);
-
     const cellDate = new Date(viewYear, viewMonth, d);
     cellDate.setHours(0, 0, 0, 0);
     const isFuture = cellDate > todayObj;
-
     let cls = 'cal-cell';
     if (isDone)   cls += ' done';
     if (isToday)  cls += ' today';
     if (isFuture) cls += ' future';
-
     const click = isFuture ? '' : 'onclick="toggleDate(\'' + habit.id + '\',\'' + ds + '\')"';
-    const label = isDone ? '✕' : d;
-
-    html += '<div class="' + cls + '" ' + click + '>' + label + '</div>';
+    html += '<div class="' + cls + '" ' + click + '>' + (isDone ? '✕' : d) + '</div>';
   }
-
   html += '</div>';
   return html;
 }
+
+
+/* ══════════════════════════════════
+   WEIGHT CARD RENDERER
+══════════════════════════════════ */
+function renderWeightCard(h) {
+  const todayWeight = h.entries && h.entries[TODAY];
+  const safeName    = h.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+  return (
+    '<div class="habit-card ' + (todayWeight ? 'checked' : '') + '" data-id="' + h.id + '">' +
+      '<div class="card-top">' +
+        '<span class="drag-handle" title="Drag to reorder">⠿</span>' +
+        '<button class="check-btn ' + (todayWeight ? 'done' : '') + '" onclick="openWeightPopup(\'' + h.id + '\',\'' + TODAY + '\')">⚖️</button>' +
+        '<span class="habit-name">' + h.name + '</span>' +
+        '<div class="streak-col">' +
+          '<span class="streak-num ' + (todayWeight ? '' : 'zero') + '">' + (todayWeight || '—') + '</span>' +
+          '<span class="streak-unit">kg</span>' +
+        '</div>' +
+        '<button class="del-btn" onclick="askDelete(\'' + h.id + '\', \'' + safeName + '\')" aria-label="Delete">✕</button>' +
+      '</div>' +
+      '<div class="cal-wrap">' + renderWeightCalendar(h) + '</div>' +
+    '</div>'
+  );
+}
+
+function renderWeightCalendar(habit) {
+  const entries     = habit.entries || {};
+  const firstDayJS  = new Date(viewYear, viewMonth, 1).getDay();
+  const startOffset = firstDayJS === 0 ? 6 : firstDayJS - 1;
+  const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+  const todayObj    = new Date();
+  const todayYear   = todayObj.getFullYear();
+  const todayMonth  = todayObj.getMonth();
+  const todayDate   = todayObj.getDate();
+
+  let html = '<div class="cal-grid">';
+  ['M','T','W','T','F','S','S'].forEach(function(l) { html += '<div class="cal-hdr">' + l + '</div>'; });
+  for (let i = 0; i < startOffset; i++) { html += '<div class="cal-cell empty"></div>'; }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const ds       = viewYear + '-' + String(viewMonth + 1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+    const weight   = entries[ds];
+    const isToday  = (viewYear === todayYear && viewMonth === todayMonth && d === todayDate);
+    const cellDate = new Date(viewYear, viewMonth, d);
+    cellDate.setHours(0, 0, 0, 0);
+    const isFuture = cellDate > todayObj;
+    let cls = 'cal-cell';
+    if (weight)   cls += ' weight-entry';
+    if (isToday)  cls += ' today';
+    if (isFuture) cls += ' future';
+    const click = isFuture ? '' : 'onclick="openWeightPopup(\'' + habit.id + '\',\'' + ds + '\')"';
+    html += '<div class="' + cls + '" ' + click + '>' + (weight || d) + '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+
+/* ══════════════════════════════════
+   WEIGHT POPUP
+══════════════════════════════════ */
+var weightPopupState = { id: null, ds: null };
+
+function openWeightPopup(id, ds) {
+  weightPopupState = { id: id, ds: ds };
+  const habit    = habits.find(function(h) { return h.id === id; });
+  const existing = habit && habit.entries && habit.entries[ds];
+  document.getElementById('weightInput').value = existing || '';
+  document.getElementById('weightPopupDate').textContent = new Date(ds + 'T00:00:00').toLocaleDateString('en-US', {
+    weekday: 'long', month: 'long', day: 'numeric'
+  });
+  document.getElementById('weightOverlay').classList.add('open');
+  setTimeout(function() { document.getElementById('weightInput').focus(); }, 150);
+}
+
+function closeWeightPopup() {
+  document.getElementById('weightOverlay').classList.remove('open');
+  weightPopupState = { id: null, ds: null };
+}
+
+function saveWeight() {
+  const val = parseFloat(document.getElementById('weightInput').value);
+  const id  = weightPopupState.id;
+  const ds  = weightPopupState.ds;
+  if (!id || !ds || isNaN(val) || val < 20 || val > 300) { closeWeightPopup(); return; }
+  const habit = habits.find(function(h) { return h.id === id; });
+  if (!habit) return;
+  if (!habit.entries) habit.entries = {};
+  habit.entries[ds] = val;
+  saveHabits();
+  closeWeightPopup();
+  render();
+}
+
+document.getElementById('weightInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') saveWeight();
+});
 
 
 /* ══════════════════════════════════
@@ -298,7 +380,6 @@ function initSortable() {
     sortableInstance.destroy();
     sortableInstance = null;
   }
-
   sortableInstance = Sortable.create(document.getElementById('habitGrid'), {
     handle:      '.drag-handle',
     animation:   200,
@@ -321,7 +402,7 @@ function loadHabits() {
   const raw = localStorage.getItem(STORAGE_HABITS);
   habits = raw ? JSON.parse(raw) : [];
   if (habits.length === 0) {
-    habits = [{ id: '1', name: 'Duolingo', checkins: [] }];
+    habits = [{ id: '1', name: 'Duolingo', type: 'habit', checkins: [] }];
     saveHabits();
   }
   render();
@@ -339,7 +420,7 @@ function toggleToday(id) { toggleDate(id, TODAY); }
 
 function toggleDate(id, ds) {
   const habit = habits.find(function(h) { return h.id === id; });
-  if (!habit) return;
+  if (!habit || !habit.checkins) return;
   if (habit.checkins.includes(ds)) {
     habit.checkins = habit.checkins.filter(function(d) { return d !== ds; });
   } else {
@@ -350,10 +431,14 @@ function toggleDate(id, ds) {
 }
 
 function addHabit() {
-  const input = document.getElementById('addInput');
-  const name  = input.value.trim();
+  const input    = document.getElementById('addInput');
+  const name     = input.value.trim();
   if (!name) return;
-  habits.push({ id: Date.now().toString(), name: name, checkins: [] });
+  const isWeight = name.toLowerCase().includes('weight');
+  habits.push(isWeight
+    ? { id: Date.now().toString(), name: name, type: 'weight', entries: {} }
+    : { id: Date.now().toString(), name: name, type: 'habit',  checkins: [] }
+  );
   input.value = '';
   saveHabits();
   render();
@@ -366,7 +451,7 @@ document.getElementById('addInput').addEventListener('keydown', function(e) {
 function askDelete(id, name) {
   pendingDelete = id;
   document.getElementById('confirmMsg').textContent =
-    'Delete "' + name + '"? All your streak history will be gone forever.';
+    'Delete "' + name + '"? All your data will be gone forever.';
   document.getElementById('confirmOverlay').classList.add('open');
 }
 
@@ -391,8 +476,10 @@ function render() {
   document.getElementById('monthLabel').textContent =
     MONTH_NAMES[viewMonth] + ' ' + viewYear;
 
-  const doneToday = habits.filter(function(h) { return h.checkins.includes(TODAY); }).length;
-  const total     = habits.length;
+  // Progress bar counts habits only (not weight cards)
+  const habitOnly = habits.filter(function(h) { return h.type !== 'weight'; });
+  const doneToday = habitOnly.filter(function(h) { return h.checkins && h.checkins.includes(TODAY); }).length;
+  const total     = habitOnly.length;
   const pct       = total > 0 ? Math.round((doneToday / total) * 100) : 0;
 
   document.getElementById('doneCount').textContent    = doneToday;
@@ -409,8 +496,10 @@ function render() {
   }
 
   grid.innerHTML = habits.map(function(h) {
-    const isTodayDone = h.checkins.includes(TODAY);
-    const streak      = getStreak(h.checkins);
+    if (h.type === 'weight') return renderWeightCard(h);
+
+    const isTodayDone = h.checkins && h.checkins.includes(TODAY);
+    const streak      = getStreak(h.checkins || []);
     const unit        = streak === 1 ? 'day' : 'days';
     const emoji       = getEmoji(h.name);
     const safeName    = h.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
@@ -419,11 +508,7 @@ function render() {
       '<div class="habit-card ' + (isTodayDone ? 'checked' : '') + '" data-id="' + h.id + '">' +
         '<div class="card-top">' +
           '<span class="drag-handle" title="Drag to reorder">⠿</span>' +
-          '<button' +
-          ' class="check-btn ' + (isTodayDone ? 'done' : '') + '"' +
-          ' onclick="toggleToday(\'' + h.id + '\')"' +
-          ' aria-label="' + (isTodayDone ? 'Uncheck' : 'Check') + ' ' + h.name + '"' +
-          '>' + (isTodayDone ? '✓' : emoji) + '</button>' +
+          '<button class="check-btn ' + (isTodayDone ? 'done' : '') + '" onclick="toggleToday(\'' + h.id + '\')" aria-label="' + (isTodayDone ? 'Uncheck' : 'Check') + ' ' + h.name + '">' + (isTodayDone ? '✓' : emoji) + '</button>' +
           '<span class="habit-name">' + h.name + '</span>' +
           '<div class="streak-col">' +
             '<span class="streak-num ' + (streak === 0 ? 'zero' : '') + '">' + (streak === 0 ? '—' : streak) + '</span>' +

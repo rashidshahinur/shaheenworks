@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Habits — Shaheen</title>
   <meta name="robots" content="noindex, nofollow">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap"
+    rel="stylesheet">
   <script src="https://unpkg.com/sortablejs@1.15.2/Sortable.min.js"></script>
   <link rel="stylesheet" href="habits.css">
 </head>
+
 <body>
 
   <div id="setup">
@@ -53,7 +57,9 @@
           <span class="prog-label">Today</span>
           <span class="prog-frac"><b id="doneCount">0</b> of <span id="totalCount">0</span> done</span>
         </div>
-        <div class="track"><div class="fill" id="progressFill" style="width:0%"></div></div>
+        <div class="track">
+          <div class="fill" id="progressFill" style="width:0%"></div>
+        </div>
         <p class="done-msg" id="doneMsg">✦ All done for today — keep it up.</p>
       </div>
       <div class="month-nav">
@@ -108,6 +114,22 @@
     </div>
   </div>
 
+  <div class="overlay" id="weightOverlay">
+    <div class="sheet">
+      <p class="sheet-title" id="weightPopupDate"></p>
+      <div class="weight-input-row">
+        <input type="number" id="weightInput" class="sheet-input" placeholder="72.4" step="0.1" min="20" max="300">
+        <span class="weight-kg-label">kg</span>
+      </div>
+      <div class="sheet-btns">
+        <button class="btn-cancel" onclick="closeWeightPopup()">Cancel</button>
+        <button class="btn-save" onclick="saveWeight()">Save</button>
+      </div>
+    </div>
+  </div>
+
+
   <script src="habits.js"></script>
 </body>
+
 </html>
