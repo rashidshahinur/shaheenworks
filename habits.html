@@ -12,41 +12,37 @@
        VARIABLES
     ══════════════════════════════════ */
     :root {
-      --bg:        #f5f2eb;
-      --surface:   #faf8f3;
-      --surf2:     #ede9e0;
-      --border:    #d8d1c6;
-      --text:      #1f1b17;
-      --muted:     #7a7269;
-      --teal:      #0e6a67;
-      --teal-08:   rgba(14, 106, 103, 0.08);
-      --teal-18:   rgba(14, 106, 103, 0.18);
-      --teal-45:   rgba(14, 106, 103, 0.45);
-      --red:       #b53028;
+      --bg:       #f5f2eb;
+      --surface:  #faf8f3;
+      --surf2:    #ede9e0;
+      --border:   #d8d1c6;
+      --text:     #1f1b17;
+      --muted:    #7a7269;
+      --teal:     #0e6a67;
+      --teal-08:  rgba(14, 106, 103, 0.08);
+      --teal-18:  rgba(14, 106, 103, 0.18);
+      --teal-45:  rgba(14, 106, 103, 0.45);
+      --red:      #b53028;
     }
 
     [data-theme="dark"] {
-      --bg:        #161412;
-      --surface:   #1d1a17;
-      --surf2:     #252118;
-      --border:    #302c27;
-      --text:      #ece7de;
-      --muted:     #8c857c;
-      --teal:      #69aca8;
-      --teal-08:   rgba(105, 172, 168, 0.09);
-      --teal-18:   rgba(105, 172, 168, 0.18);
-      --teal-45:   rgba(105, 172, 168, 0.44);
-      --red:       #d95f55;
+      --bg:       #161412;
+      --surface:  #1d1a17;
+      --surf2:    #252118;
+      --border:   #302c27;
+      --text:     #ece7de;
+      --muted:    #8c857c;
+      --teal:     #69aca8;
+      --teal-08:  rgba(105, 172, 168, 0.09);
+      --teal-18:  rgba(105, 172, 168, 0.18);
+      --teal-45:  rgba(105, 172, 168, 0.44);
+      --red:      #d95f55;
     }
 
     /* ══════════════════════════════════
        RESET
     ══════════════════════════════════ */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Inter', sans-serif;
@@ -57,11 +53,12 @@
     }
 
     /* ══════════════════════════════════
-       LOCK SCREEN
+       LOCK & SETUP SCREENS
     ══════════════════════════════════ */
+    #setup,
     #lock {
       min-height: 100vh;
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
       padding: 2rem;
@@ -69,7 +66,7 @@
 
     .lock-box {
       width: 100%;
-      max-width: 310px;
+      max-width: 320px;
       text-align: center;
     }
 
@@ -90,7 +87,7 @@
     .lock-hint {
       font-size: 0.78rem;
       color: var(--muted);
-      margin-bottom: 2.25rem;
+      margin-bottom: 2rem;
     }
 
     .lock-input {
@@ -105,13 +102,11 @@
       text-align: center;
       letter-spacing: 0.14em;
       outline: none;
-      margin-bottom: 0.7rem;
+      margin-bottom: 0.65rem;
       transition: border-color 0.18s;
     }
 
-    .lock-input:focus {
-      border-color: var(--teal);
-    }
+    .lock-input:focus { border-color: var(--teal); }
 
     .lock-btn {
       width: 100%;
@@ -124,17 +119,103 @@
       font-size: 0.92rem;
       font-weight: 500;
       cursor: pointer;
-      transition: opacity 0.15s;
+      margin-bottom: 0.6rem;
     }
 
     .lock-btn:active { opacity: 0.82; }
 
     .lock-err {
-      margin-top: 0.6rem;
       font-size: 0.78rem;
       color: var(--red);
       min-height: 1.1em;
     }
+
+    /* Small link under login form */
+    .lock-link {
+      display: inline-block;
+      margin-top: 1.25rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      background: none;
+      border: none;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .lock-link:hover { color: var(--teal); }
+
+    /* ══════════════════════════════════
+       CHANGE PASSWORD MODAL
+    ══════════════════════════════════ */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.42);
+      z-index: 300;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 1.25rem;
+    }
+
+    .overlay.open { display: flex; }
+
+    .sheet {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.6rem;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .sheet-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .sheet-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      margin-bottom: 0.6rem;
+      transition: border-color 0.18s;
+    }
+
+    .sheet-input:focus { border-color: var(--teal); }
+
+    .sheet-err {
+      font-size: 0.78rem;
+      color: var(--red);
+      min-height: 1em;
+      margin-bottom: 0.75rem;
+    }
+
+    .sheet-btns { display: flex; gap: 10px; }
+
+    .btn-cancel, .btn-save, .btn-del {
+      flex: 1;
+      padding: 0.7rem;
+      border-radius: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .btn-cancel { background: var(--surf2); color: var(--text); border: 1px solid var(--border); }
+    .btn-save   { background: var(--teal); color: #fff; border: none; }
+    .btn-del    { background: var(--red);  color: #fff; border: none; }
 
     /* ══════════════════════════════════
        APP SHELL
@@ -155,9 +236,7 @@
       border-bottom: 1px solid var(--border);
     }
 
-    [data-theme="dark"] .app-header {
-      background: rgba(22, 20, 18, 0.85);
-    }
+    [data-theme="dark"] .app-header { background: rgba(22, 20, 18, 0.85); }
 
     .header-brand {
       font-family: 'Playfair Display', serif;
@@ -165,11 +244,7 @@
       color: var(--text);
     }
 
-    .header-right {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
+    .header-right { display: flex; gap: 8px; align-items: center; }
 
     .h-btn {
       background: none;
@@ -183,24 +258,19 @@
       transition: color 0.15s, border-color 0.15s;
     }
 
-    .h-btn.lock-btn-sm:hover {
-      color: var(--red);
-      border-color: var(--red);
-    }
+    .h-btn.danger:hover { color: var(--red); border-color: var(--red); }
 
     /* ══════════════════════════════════
        MAIN CONTENT
     ══════════════════════════════════ */
     main {
-      max-width: 620px;
+      max-width: 900px;
       margin: 0 auto;
       padding: 2.5rem 1.25rem 5rem;
     }
 
-    /* ── Greeting ── */
-    .greeting {
-      margin-bottom: 2rem;
-    }
+    /* Greeting */
+    .greeting { margin-bottom: 2rem; }
 
     .greeting-line {
       font-size: 0.78rem;
@@ -217,7 +287,7 @@
       color: var(--text);
     }
 
-    /* ── Today progress ── */
+    /* Progress card */
     .prog-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -240,23 +310,10 @@
       letter-spacing: 0.07em;
     }
 
-    .prog-frac {
-      font-size: 1rem;
-      font-weight: 500;
-      color: var(--text);
-    }
+    .prog-frac { font-size: 1rem; font-weight: 500; color: var(--text); }
+    .prog-frac b { color: var(--teal); font-weight: 500; }
 
-    .prog-frac b {
-      color: var(--teal);
-      font-weight: 500;
-    }
-
-    .track {
-      height: 4px;
-      background: var(--surf2);
-      border-radius: 99px;
-      overflow: hidden;
-    }
+    .track { height: 4px; background: var(--surf2); border-radius: 99px; overflow: hidden; }
 
     .fill {
       height: 100%;
@@ -272,7 +329,7 @@
       display: none;
     }
 
-    /* ── Month navigator ── */
+    /* Month navigator */
     .month-nav {
       display: flex;
       align-items: center;
@@ -296,10 +353,7 @@
       transition: border-color 0.15s, color 0.15s;
     }
 
-    .month-nav-btn:hover {
-      border-color: var(--teal);
-      color: var(--teal);
-    }
+    .month-nav-btn:hover { border-color: var(--teal); color: var(--teal); }
 
     .month-nav-label {
       font-family: 'Playfair Display', serif;
@@ -311,15 +365,23 @@
     }
 
     /* ══════════════════════════════════
-       HABIT CARDS
+       HABIT GRID  ← the big change
     ══════════════════════════════════ */
-    .habit-list {
-      display: flex;
-      flex-direction: column;
+    .habit-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       gap: 14px;
       margin-bottom: 1rem;
     }
 
+    /* 1 column on small screens */
+    @media (max-width: 600px) {
+      .habit-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ══════════════════════════════════
+       HABIT CARD
+    ══════════════════════════════════ */
     .habit-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -328,28 +390,24 @@
       transition: border-color 0.25s;
     }
 
-    .habit-card.checked {
-      border-color: var(--teal-18);
-    }
+    .habit-card.checked { border-color: var(--teal-18); }
 
-    /* ── Card top row ── */
+    /* Top row inside card */
     .card-top {
       display: flex;
       align-items: center;
-      gap: 12px;
-      padding: 1rem 1.1rem;
+      gap: 10px;
+      padding: 0.9rem 1rem;
       border-bottom: 1px solid var(--border);
     }
 
-    .habit-card.checked .card-top {
-      border-bottom-color: var(--teal-18);
-    }
+    .habit-card.checked .card-top { border-bottom-color: var(--teal-18); }
 
-    /* Circle check button — marks today */
+    /* Circle button — shows emoji when unchecked, ✓ when done */
     .check-btn {
-      width: 42px;
-      height: 42px;
-      min-width: 42px;
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
       border-radius: 50%;
       border: 1.5px solid var(--border);
       background: transparent;
@@ -357,8 +415,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
-      color: transparent;
+      font-size: 1.2rem;    /* emoji size */
       transition: all 0.2s;
       -webkit-tap-highlight-color: transparent;
     }
@@ -368,15 +425,17 @@
       background: var(--teal-08);
     }
 
+    /* When checked: teal fill, white ✓ */
     .check-btn.done {
       background: var(--teal);
       border-color: var(--teal);
       color: white;
+      font-size: 1rem;
     }
 
     .habit-name {
       flex: 1;
-      font-size: 0.95rem;
+      font-size: 0.88rem;
       font-weight: 500;
       color: var(--text);
       white-space: nowrap;
@@ -384,84 +443,68 @@
       text-overflow: ellipsis;
     }
 
-    /* Streak display */
+    /* Streak */
     .streak-col {
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-width: 44px;
+      min-width: 38px;
     }
 
     .streak-num {
       font-family: 'Playfair Display', serif;
-      font-size: 1.7rem;
+      font-size: 1.5rem;
       font-weight: 600;
       line-height: 1;
       color: var(--teal);
     }
 
-    .streak-num.zero {
-      color: var(--muted);
-      font-size: 1.2rem;
-    }
+    .streak-num.zero { color: var(--muted); font-size: 1.1rem; }
 
-    .streak-unit {
-      font-size: 0.62rem;
-      color: var(--muted);
-      margin-top: 2px;
-      letter-spacing: 0.04em;
-    }
+    .streak-unit { font-size: 0.6rem; color: var(--muted); margin-top: 2px; letter-spacing: 0.04em; }
 
-    /* Delete button */
+    /* Delete */
     .del-btn {
       background: none;
       border: none;
       cursor: pointer;
       color: var(--muted);
       opacity: 0.3;
-      padding: 6px;
-      font-size: 0.8rem;
+      padding: 5px;
+      font-size: 0.75rem;
       line-height: 1;
       -webkit-tap-highlight-color: transparent;
       transition: opacity 0.15s, color 0.15s;
     }
 
-    .del-btn:hover {
-      opacity: 1;
-      color: var(--red);
-    }
+    .del-btn:hover { opacity: 1; color: var(--red); }
 
     /* ══════════════════════════════════
-       CALENDAR GRID
+       CALENDAR
     ══════════════════════════════════ */
-    .cal-wrap {
-      padding: 1rem 1.1rem 1.2rem;
-    }
+    .cal-wrap { padding: 0.85rem 0.9rem 1rem; }
 
     .cal-grid {
       display: grid;
       grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
+      gap: 3px;
     }
 
-    /* Day-of-week headers */
     .cal-hdr {
-      font-size: 0.68rem;
+      font-size: 0.64rem;
       color: var(--muted);
       text-align: center;
-      padding: 2px 0 6px;
-      font-weight: 400;
+      padding: 2px 0 5px;
       letter-spacing: 0.03em;
     }
 
-    /* Day cells */
     .cal-cell {
       aspect-ratio: 1;
-      border-radius: 7px;
+      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       color: var(--muted);
       cursor: pointer;
       user-select: none;
@@ -469,42 +512,32 @@
       transition: background 0.15s, color 0.15s;
     }
 
-    /* Hoverable past/today cells */
     .cal-cell:not(.empty):not(.future):hover {
       background: var(--teal-08);
       color: var(--teal);
     }
 
-    /* Non-interactive */
-    .cal-cell.empty {
-      cursor: default;
-    }
+    .cal-cell.empty   { cursor: default; }
+    .cal-cell.future  { color: var(--border); cursor: default; }
 
-    .cal-cell.future {
-      color: var(--border);
-      cursor: default;
-    }
-
-    /* Today ring (not yet done) */
+    /* Today — teal ring */
     .cal-cell.today {
-      font-weight: 500;
+      font-weight: 600;
       color: var(--teal);
       box-shadow: inset 0 0 0 1.5px var(--teal);
     }
 
-    /* Done — teal fill with ✕ */
+    /* Done — teal fill, white ✕ */
     .cal-cell.done {
       background: var(--teal);
       color: #fff;
-      font-size: 0.82rem;
+      font-size: 0.75rem;
       font-weight: 600;
     }
 
-    /* Done + today — extra ring outside */
+    /* Done + today — outer ring */
     .cal-cell.done.today {
-      box-shadow:
-        0 0 0 2px var(--bg),
-        0 0 0 4px var(--teal);
+      box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--teal);
     }
 
     /* ══════════════════════════════════
@@ -520,14 +553,9 @@
       transition: border-color 0.18s;
     }
 
-    .add-row:focus-within {
-      border-color: var(--teal-45);
-    }
+    .add-row:focus-within { border-color: var(--teal-45); }
 
-    .add-plus {
-      font-size: 1rem;
-      color: var(--muted);
-    }
+    .add-plus { font-size: 1rem; color: var(--muted); }
 
     .add-input {
       flex: 1;
@@ -556,90 +584,41 @@
 
     .add-btn:active { opacity: 0.82; }
 
-    /* ══════════════════════════════════
-       CONFIRM DELETE OVERLAY
-    ══════════════════════════════════ */
-    .overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.42);
-      z-index: 200;
-      align-items: flex-end;
-      justify-content: center;
-      padding: 1.25rem;
-    }
-
-    .overlay.open { display: flex; }
-
-    .confirm-sheet {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 1.6rem;
-      width: 100%;
-      max-width: 420px;
-    }
-
-    .confirm-msg {
-      font-size: 0.9rem;
-      color: var(--text);
-      line-height: 1.65;
-      margin-bottom: 1.2rem;
-    }
-
-    .confirm-btns { display: flex; gap: 10px; }
-
-    .btn-keep, .btn-del {
-      flex: 1;
-      padding: 0.7rem;
-      border-radius: 10px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.85rem;
-      font-weight: 500;
-      cursor: pointer;
-    }
-
-    .btn-keep {
-      background: var(--surf2);
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
-    .btn-del {
-      background: var(--red);
-      color: #fff;
-      border: none;
-    }
-
     /* Empty state */
-    .empty-state {
-      font-size: 0.82rem;
-      color: var(--muted);
-      padding: 0.5rem 0 1rem;
-    }
+    .empty-state { font-size: 0.82rem; color: var(--muted); padding: 0.5rem 0 1rem; }
   </style>
 </head>
 <body>
 
 
 <!-- ══════════════════════════════════════════
-     LOCK SCREEN
+     FIRST-TIME SETUP  (shown when no password saved)
+══════════════════════════════════════════ -->
+<div id="setup">
+  <div class="lock-box">
+    <span class="lock-emoji">🪁</span>
+    <h1 class="lock-title">Welcome</h1>
+    <p class="lock-hint">Create a password. It saves to this browser — you will never need to put it in the code.</p>
+    <input type="password" id="setupPw1" class="lock-input" placeholder="Choose a password">
+    <input type="password" id="setupPw2" class="lock-input" placeholder="Confirm password">
+    <button class="lock-btn" onclick="saveNewPassword()">Set Password</button>
+    <p class="lock-err" id="setupErr"></p>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     LOCK SCREEN  (shown when password already set)
 ══════════════════════════════════════════ -->
 <div id="lock">
   <div class="lock-box">
     <span class="lock-emoji">🪁</span>
     <h1 class="lock-title">Habits</h1>
     <p class="lock-hint">Your private space</p>
-    <input
-      type="password"
-      id="pwInput"
-      class="lock-input"
-      placeholder="••••••••"
-      autocomplete="current-password"
-    >
+    <input type="password" id="pwInput" class="lock-input" placeholder="••••••••" autocomplete="current-password">
     <button class="lock-btn" onclick="unlock()">Enter</button>
     <p class="lock-err" id="pwErr"></p>
+    <button class="lock-link" onclick="openChangePw()">Change password</button>
   </div>
 </div>
 
@@ -653,19 +632,17 @@
     <span class="header-brand">Shaheen · Habits</span>
     <div class="header-right">
       <button class="h-btn" id="themeBtn" onclick="toggleTheme()">☀️</button>
-      <button class="h-btn lock-btn-sm" onclick="logout()">Lock</button>
+      <button class="h-btn danger" onclick="logout()">Lock</button>
     </div>
   </header>
 
   <main>
 
-    <!-- Greeting -->
     <div class="greeting">
       <p class="greeting-line" id="greetLine"></p>
       <p class="greeting-date" id="greetDate"></p>
     </div>
 
-    <!-- Today's progress -->
     <div class="prog-card">
       <div class="prog-top">
         <span class="prog-label">Today</span>
@@ -677,25 +654,17 @@
       <p class="done-msg" id="doneMsg">✦ All done for today — keep it up.</p>
     </div>
 
-    <!-- Month navigator -->
     <div class="month-nav">
       <button class="month-nav-btn" onclick="prevMonth()">←</button>
       <span class="month-nav-label" id="monthLabel"></span>
       <button class="month-nav-btn" onclick="nextMonth()">→</button>
     </div>
 
-    <!-- Habit cards render here -->
-    <div class="habit-list" id="habitList"></div>
+    <div class="habit-grid" id="habitGrid"></div>
 
-    <!-- Add new habit -->
     <div class="add-row">
       <span class="add-plus">＋</span>
-      <input
-        class="add-input"
-        id="addInput"
-        placeholder="Add a new habit…"
-        maxlength="60"
-      >
+      <input class="add-input" id="addInput" placeholder="Add a new habit…" maxlength="60">
       <button class="add-btn" onclick="addHabit()">Add</button>
     </div>
 
@@ -704,14 +673,32 @@
 
 
 <!-- ══════════════════════════════════════════
+     CHANGE PASSWORD SHEET
+══════════════════════════════════════════ -->
+<div class="overlay" id="changePwOverlay">
+  <div class="sheet">
+    <p class="sheet-title">Change password</p>
+    <input type="password" id="cpCurrent" class="sheet-input" placeholder="Current password">
+    <input type="password" id="cpNew1"    class="sheet-input" placeholder="New password">
+    <input type="password" id="cpNew2"    class="sheet-input" placeholder="Confirm new password">
+    <p class="sheet-err" id="cpErr"></p>
+    <div class="sheet-btns">
+      <button class="btn-cancel" onclick="closeChangePw()">Cancel</button>
+      <button class="btn-save"   onclick="doChangePw()">Save</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
      CONFIRM DELETE SHEET
 ══════════════════════════════════════════ -->
 <div class="overlay" id="confirmOverlay">
-  <div class="confirm-sheet">
-    <p class="confirm-msg" id="confirmMsg"></p>
-    <div class="confirm-btns">
-      <button class="btn-keep" onclick="closeConfirm()">Keep it</button>
-      <button class="btn-del" onclick="doDelete()">Delete</button>
+  <div class="sheet">
+    <p class="sheet-title" id="confirmMsg" style="font-family:'Inter',sans-serif; font-size:0.9rem; font-weight:400; line-height:1.65; margin-bottom:1.2rem;"></p>
+    <div class="sheet-btns">
+      <button class="btn-cancel" onclick="closeConfirm()">Keep it</button>
+      <button class="btn-del"    onclick="doDelete()">Delete</button>
     </div>
   </div>
 </div>
@@ -719,10 +706,13 @@
 
 <script>
 
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // CHANGE YOUR PASSWORD HERE
-  const PASSWORD = 'E@rthH@b!t$';
-  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  /* ══════════════════════════════════
+     CONSTANTS
+  ══════════════════════════════════ */
+  const STORAGE_PW      = 'h-password';   // where password lives in localStorage
+  const STORAGE_HABITS  = 'shaheen-habits-v1';
+  const STORAGE_THEME   = 'h-theme';
+  const SESSION_AUTH    = 'h-auth';
 
   const MONTH_NAMES = [
     'January','February','March','April','May','June',
@@ -730,67 +720,138 @@
   ];
 
 
-  // ──────────────────────────────────
-  // HELPERS
-  // ──────────────────────────────────
+  /* ══════════════════════════════════
+     HELPERS
+  ══════════════════════════════════ */
 
-  // Always use local date — fixes Bangladesh timezone (UTC+6)
+  // Use LOCAL date — avoids UTC timezone issues (important for Bangladesh, UTC+6)
   function localDateStr(date) {
     const d = date || new Date();
-    const y   = d.getFullYear();
-    const m   = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return y + '-' + m + '-' + day;
+    return d.getFullYear()
+      + '-' + String(d.getMonth() + 1).padStart(2, '0')
+      + '-' + String(d.getDate()).padStart(2, '0');
   }
 
   const TODAY = localDateStr();
 
 
-  // ──────────────────────────────────
-  // STATE
-  // ──────────────────────────────────
+  /* ══════════════════════════════════
+     AUTO EMOJI
+     Detects an emoji from the habit name.
+     You can extend this list as you add habits.
+  ══════════════════════════════════ */
+  function getEmoji(name) {
+    const n = name.toLowerCase();
 
+    if (n.includes('duolingo') || n.includes('language'))            return '🦉';
+    if (n.includes('dumble') || n.includes('dumbbell'))              return '🏋️';
+    if (n.includes('gym') || n.includes('workout') || n.includes('exercise') || n.includes('pushup')) return '💪';
+    if (n.includes('run') || n.includes('jog'))                      return '🏃';
+    if (n.includes('walk'))                                          return '🚶';
+    if (n.includes('swim'))                                          return '🏊';
+    if (n.includes('yoga') || n.includes('stretch'))                 return '🧘';
+    if (n.includes('medit'))                                         return '🧘';
+    if (n.includes('read') || n.includes('book'))                    return '📚';
+    if (n.includes('write') || n.includes('journal') || n.includes('diary')) return '✍️';
+    if (n.includes('water') || n.includes('drink'))                  return '💧';
+    if (n.includes('sleep') || n.includes('bed'))                    return '😴';
+    if (n.includes('pray') || n.includes('namaz') || n.includes('salah')) return '🤲';
+    if (n.includes('morning'))                                       return '🌅';
+    if (n.includes('night') || n.includes('evening'))                return '🌙';
+    if (n.includes('code') || n.includes('program') || n.includes('coding')) return '💻';
+    if (n.includes('music') || n.includes('guitar') || n.includes('piano') || n.includes('sing')) return '🎵';
+    if (n.includes('cook') || n.includes('food'))                    return '🍳';
+    if (n.includes('vitamin') || n.includes('medicine') || n.includes('pill')) return '💊';
+    if (n.includes('fast') || n.includes('fasting'))                 return '⏱️';
+    if (n.includes('diet') || n.includes('sugar') || n.includes('healthy')) return '🥗';
+    if (n.includes('study') || n.includes('learn'))                  return '📖';
+    if (n.includes('gratitude') || n.includes('thank'))              return '🙏';
+    if (n.includes('cold') || n.includes('shower'))                  return '🚿';
+    if (n.includes('breath'))                                        return '🫁';
+    if (n.includes('draw') || n.includes('sketch') || n.includes('paint')) return '🎨';
+    if (n.includes('photo'))                                         return '📷';
+    if (n.includes('call') || n.includes('phone'))                   return '📞';
+    if (n.includes('no phone') || n.includes('screen'))              return '📵';
+
+    return '✨'; // default
+  }
+
+
+  /* ══════════════════════════════════
+     STATE
+  ══════════════════════════════════ */
   let habits        = [];
   let pendingDelete = null;
 
   const nowDate  = new Date();
   let viewYear   = nowDate.getFullYear();
-  let viewMonth  = nowDate.getMonth(); // 0-indexed
+  let viewMonth  = nowDate.getMonth();   // 0-indexed
 
 
-  // ──────────────────────────────────
-  // AUTH
-  // ──────────────────────────────────
+  /* ══════════════════════════════════
+     AUTH — PASSWORD LIVES IN localStorage
+     The code never contains the password.
+  ══════════════════════════════════ */
+  function initAuth() {
+    const savedPw = localStorage.getItem(STORAGE_PW);
 
-  // Auto-login if session is active
-  if (sessionStorage.getItem('h-auth') === '1') {
+    if (!savedPw) {
+      // First time — show setup screen
+      document.getElementById('setup').style.display = 'flex';
+    } else if (sessionStorage.getItem(SESSION_AUTH) === '1') {
+      // Already logged in this session
+      showApp();
+    } else {
+      // Has password, needs to log in
+      document.getElementById('lock').style.display = 'flex';
+    }
+  }
+
+  // First-time setup: save new password
+  function saveNewPassword() {
+    const pw1 = document.getElementById('setupPw1').value;
+    const pw2 = document.getElementById('setupPw2').value;
+    const err = document.getElementById('setupErr');
+
+    if (!pw1) { err.textContent = 'Please enter a password.'; return; }
+    if (pw1 !== pw2) { err.textContent = 'Passwords do not match.'; return; }
+    if (pw1.length < 4) { err.textContent = 'At least 4 characters please.'; return; }
+
+    localStorage.setItem(STORAGE_PW, pw1);
+    sessionStorage.setItem(SESSION_AUTH, '1');
+    document.getElementById('setup').style.display = 'none';
+    err.textContent = '';
     showApp();
   }
 
-  document.getElementById('pwInput').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') unlock();
-  });
-
+  // Unlock with saved password
   function unlock() {
     const entered = document.getElementById('pwInput').value;
-    if (entered === PASSWORD) {
-      sessionStorage.setItem('h-auth', '1');
-      document.getElementById('pwErr').textContent = '';
+    const saved   = localStorage.getItem(STORAGE_PW);
+    const err     = document.getElementById('pwErr');
+
+    if (entered === saved) {
+      sessionStorage.setItem(SESSION_AUTH, '1');
+      err.textContent = '';
+      document.getElementById('lock').style.display = 'none';
       showApp();
     } else {
-      document.getElementById('pwErr').textContent = 'Wrong password.';
+      err.textContent = 'Wrong password.';
       document.getElementById('pwInput').value = '';
       document.getElementById('pwInput').focus();
     }
   }
 
+  // Lock the app
   function logout() {
-    sessionStorage.removeItem('h-auth');
+    sessionStorage.removeItem(SESSION_AUTH);
     document.getElementById('app').style.display  = 'none';
     document.getElementById('lock').style.display = 'flex';
     document.getElementById('pwInput').value      = '';
+    document.getElementById('pwErr').textContent  = '';
   }
 
+  // Show main app
   function showApp() {
     document.getElementById('lock').style.display = 'none';
     document.getElementById('app').style.display  = 'block';
@@ -799,31 +860,72 @@
     loadHabits();
   }
 
+  // Keyboard: press Enter on lock inputs
+  document.getElementById('setupPw2').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') saveNewPassword();
+  });
 
-  // ──────────────────────────────────
-  // THEME
-  // ──────────────────────────────────
+  document.getElementById('pwInput').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') unlock();
+  });
 
+
+  /* ══════════════════════════════════
+     CHANGE PASSWORD
+  ══════════════════════════════════ */
+  function openChangePw() {
+    document.getElementById('cpCurrent').value = '';
+    document.getElementById('cpNew1').value    = '';
+    document.getElementById('cpNew2').value    = '';
+    document.getElementById('cpErr').textContent = '';
+    document.getElementById('changePwOverlay').classList.add('open');
+  }
+
+  function closeChangePw() {
+    document.getElementById('changePwOverlay').classList.remove('open');
+  }
+
+  function doChangePw() {
+    const current = document.getElementById('cpCurrent').value;
+    const new1    = document.getElementById('cpNew1').value;
+    const new2    = document.getElementById('cpNew2').value;
+    const err     = document.getElementById('cpErr');
+    const saved   = localStorage.getItem(STORAGE_PW);
+
+    if (current !== saved) { err.textContent = 'Current password is wrong.'; return; }
+    if (!new1)             { err.textContent = 'Enter a new password.'; return; }
+    if (new1 !== new2)     { err.textContent = 'New passwords do not match.'; return; }
+    if (new1.length < 4)   { err.textContent = 'At least 4 characters please.'; return; }
+
+    localStorage.setItem(STORAGE_PW, new1);
+    err.textContent = '';
+    closeChangePw();
+  }
+
+
+  /* ══════════════════════════════════
+     THEME
+  ══════════════════════════════════ */
   function applyTheme() {
-    const t = localStorage.getItem('h-theme') || 'light';
+    const t = localStorage.getItem(STORAGE_THEME) || 'light';
     document.documentElement.setAttribute('data-theme', t);
     document.getElementById('themeBtn').textContent = t === 'dark' ? '🌙' : '☀️';
   }
 
   function toggleTheme() {
-    const current = document.documentElement.getAttribute('data-theme');
-    localStorage.setItem('h-theme', current === 'dark' ? 'light' : 'dark');
+    const cur = document.documentElement.getAttribute('data-theme');
+    localStorage.setItem(STORAGE_THEME, cur === 'dark' ? 'light' : 'dark');
     applyTheme();
   }
 
 
-  // ──────────────────────────────────
-  // GREETING
-  // ──────────────────────────────────
-
+  /* ══════════════════════════════════
+     GREETING
+  ══════════════════════════════════ */
   function setGreeting() {
     const hour  = new Date().getHours();
     const greet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+
     document.getElementById('greetLine').textContent = greet + ', Shaheen.';
     document.getElementById('greetDate').textContent = new Date().toLocaleDateString('en-US', {
       weekday: 'long', month: 'long', day: 'numeric'
@@ -831,10 +933,9 @@
   }
 
 
-  // ──────────────────────────────────
-  // MONTH NAVIGATION
-  // ──────────────────────────────────
-
+  /* ══════════════════════════════════
+     MONTH NAVIGATION
+  ══════════════════════════════════ */
   function prevMonth() {
     if (viewMonth === 0) { viewMonth = 11; viewYear--; }
     else viewMonth--;
@@ -848,52 +949,43 @@
   }
 
 
-  // ──────────────────────────────────
-  // STREAK
-  // ──────────────────────────────────
-
+  /* ══════════════════════════════════
+     STREAK
+  ══════════════════════════════════ */
   function getStreak(checkins) {
     if (!checkins || checkins.length === 0) return 0;
 
-    const set = new Set(checkins);
-    let count = 0;
-
-    // Start from today; if today not done, start from yesterday
-    // (streak doesn't break just because you haven't checked yet today)
+    const set    = new Set(checkins);
+    let   count  = 0;
     const cursor = new Date();
     cursor.setHours(0, 0, 0, 0);
+
+    // If today is not done, start from yesterday
+    // (streak doesn't break just because you haven't checked yet today)
     if (!set.has(TODAY)) cursor.setDate(cursor.getDate() - 1);
 
     for (let i = 0; i < 730; i++) {
       const ds = localDateStr(cursor);
-      if (set.has(ds)) {
-        count++;
-        cursor.setDate(cursor.getDate() - 1);
-      } else {
-        break;
-      }
+      if (set.has(ds)) { count++; cursor.setDate(cursor.getDate() - 1); }
+      else break;
     }
     return count;
   }
 
 
-  // ──────────────────────────────────
-  // CALENDAR RENDERER
-  // ──────────────────────────────────
-
+  /* ══════════════════════════════════
+     CALENDAR RENDERER
+  ══════════════════════════════════ */
   function renderCalendar(habit) {
     const set = new Set(habit.checkins);
 
-    // What weekday does the 1st of this month fall on?
-    const firstDayJS = new Date(viewYear, viewMonth, 1).getDay();
-    // Convert Sunday-first (JS) to Monday-first offset
-    // Mon=0, Tue=1, ..., Sun=6
-    const startOffset = (firstDayJS === 0) ? 6 : firstDayJS - 1;
+    // Which weekday is the 1st? (0=Sun … 6=Sat)
+    const firstDayJS  = new Date(viewYear, viewMonth, 1).getDay();
+    // Convert to Monday-first offset
+    const startOffset = firstDayJS === 0 ? 6 : firstDayJS - 1;
 
-    // How many days in this month?
     const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
 
-    // Today's components (local)
     const todayObj   = new Date();
     const todayYear  = todayObj.getFullYear();
     const todayMonth = todayObj.getMonth();
@@ -901,42 +993,38 @@
 
     let html = '<div class="cal-grid">';
 
-    // Day-of-week headers (Monday first)
-    ['M','T','W','T','F','S','S'].forEach(function(letter) {
-      html += '<div class="cal-hdr">' + letter + '</div>';
+    // Headers
+    ['M','T','W','T','F','S','S'].forEach(function(l) {
+      html += '<div class="cal-hdr">' + l + '</div>';
     });
 
-    // Empty cells before the 1st
+    // Empty leading cells
     for (let i = 0; i < startOffset; i++) {
       html += '<div class="cal-cell empty"></div>';
     }
 
     // Day cells
     for (let d = 1; d <= daysInMonth; d++) {
-      const ds = viewYear + '-'
-        + String(viewMonth + 1).padStart(2, '0') + '-'
-        + String(d).padStart(2, '0');
+      const ds = viewYear
+        + '-' + String(viewMonth + 1).padStart(2, '0')
+        + '-' + String(d).padStart(2, '0');
 
-      const isDone   = set.has(ds);
-      const isToday  = (viewYear === todayYear && viewMonth === todayMonth && d === todayDate);
+      const isDone  = set.has(ds);
+      const isToday = (viewYear === todayYear && viewMonth === todayMonth && d === todayDate);
 
-      // A date is in the future if it's strictly after today
       const cellDate = new Date(viewYear, viewMonth, d);
       cellDate.setHours(0, 0, 0, 0);
       const isFuture = cellDate > todayObj;
 
-      // Build class list
       let cls = 'cal-cell';
       if (isDone)   cls += ' done';
       if (isToday)  cls += ' today';
       if (isFuture) cls += ' future';
 
-      // Only past + today cells are clickable
       const click = isFuture
         ? ''
         : 'onclick="toggleDate(\'' + habit.id + '\',\'' + ds + '\')"';
 
-      // Done days show ✕, others show the day number
       const label = isDone ? '✕' : d;
 
       html += '<div class="' + cls + '" ' + click + '>' + label + '</div>';
@@ -947,15 +1035,13 @@
   }
 
 
-  // ──────────────────────────────────
-  // DATA
-  // ──────────────────────────────────
-
+  /* ══════════════════════════════════
+     DATA
+  ══════════════════════════════════ */
   function loadHabits() {
-    const raw = localStorage.getItem('shaheen-habits-v1');
+    const raw = localStorage.getItem(STORAGE_HABITS);
     habits = raw ? JSON.parse(raw) : [];
 
-    // Seed with Duolingo on first load
     if (habits.length === 0) {
       habits = [{ id: '1', name: 'Duolingo', checkins: [] }];
       saveHabits();
@@ -964,20 +1050,17 @@
   }
 
   function saveHabits() {
-    localStorage.setItem('shaheen-habits-v1', JSON.stringify(habits));
+    localStorage.setItem(STORAGE_HABITS, JSON.stringify(habits));
   }
 
 
-  // ──────────────────────────────────
-  // ACTIONS
-  // ──────────────────────────────────
-
-  // Top circle button: toggle today
+  /* ══════════════════════════════════
+     ACTIONS
+  ══════════════════════════════════ */
   function toggleToday(id) {
     toggleDate(id, TODAY);
   }
 
-  // Calendar cell click: toggle any date
   function toggleDate(id, ds) {
     const habit = habits.find(function(h) { return h.id === id; });
     if (!habit) return;
@@ -992,18 +1075,12 @@
     render();
   }
 
-  // Add a new habit
   function addHabit() {
     const input = document.getElementById('addInput');
     const name  = input.value.trim();
     if (!name) return;
 
-    habits.push({
-      id:       Date.now().toString(),
-      name:     name,
-      checkins: []
-    });
-
+    habits.push({ id: Date.now().toString(), name: name, checkins: [] });
     input.value = '';
     saveHabits();
     render();
@@ -1013,7 +1090,6 @@
     if (e.key === 'Enter') addHabit();
   });
 
-  // Delete with confirmation
   function askDelete(id, name) {
     pendingDelete = id;
     document.getElementById('confirmMsg').textContent =
@@ -1035,17 +1111,15 @@
   }
 
 
-  // ──────────────────────────────────
-  // RENDER
-  // ──────────────────────────────────
-
+  /* ══════════════════════════════════
+     RENDER
+  ══════════════════════════════════ */
   function render() {
-
-    // Update month label
+    // Month label
     document.getElementById('monthLabel').textContent =
       MONTH_NAMES[viewMonth] + ' ' + viewYear;
 
-    // Today's progress
+    // Progress
     const doneToday = habits.filter(function(h) {
       return h.checkins.includes(TODAY);
     }).length;
@@ -1058,31 +1132,32 @@
     document.getElementById('doneMsg').style.display    =
       (doneToday === total && total > 0) ? 'block' : 'none';
 
-    // Habit cards
-    const listEl = document.getElementById('habitList');
+    // Habit grid
+    const grid = document.getElementById('habitGrid');
 
     if (habits.length === 0) {
-      listEl.innerHTML = '<p class="empty-state">No habits yet — add your first one below.</p>';
+      grid.innerHTML = '<p class="empty-state">No habits yet — add your first one below.</p>';
       return;
     }
 
-    listEl.innerHTML = habits.map(function(h) {
+    grid.innerHTML = habits.map(function(h) {
       const isTodayDone = h.checkins.includes(TODAY);
       const streak      = getStreak(h.checkins);
       const unit        = streak === 1 ? 'day' : 'days';
-      // Escape name for use in onclick attribute
+      const emoji       = getEmoji(h.name);
       const safeName    = h.name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
 
       return (
         '<div class="habit-card ' + (isTodayDone ? 'checked' : '') + '">' +
 
-          /* Top row */
           '<div class="card-top">' +
+
+            // Circle button: shows emoji (unchecked) or ✓ (checked)
             '<button' +
-              ' class="check-btn ' + (isTodayDone ? 'done' : '') + '"' +
-              ' onclick="toggleToday(\'' + h.id + '\')"' +
-              ' aria-label="' + (isTodayDone ? 'Uncheck' : 'Check') + ' ' + h.name + ' for today"' +
-            '>' + (isTodayDone ? '✓' : '') + '</button>' +
+            '  class="check-btn ' + (isTodayDone ? 'done' : '') + '"' +
+            '  onclick="toggleToday(\'' + h.id + '\')"' +
+            '  aria-label="' + (isTodayDone ? 'Uncheck' : 'Check') + ' ' + h.name + '"' +
+            '>' + (isTodayDone ? '✓' : emoji) + '</button>' +
 
             '<span class="habit-name">' + h.name + '</span>' +
 
@@ -1094,19 +1169,25 @@
             '</div>' +
 
             '<button' +
-              ' class="del-btn"' +
-              ' onclick="askDelete(\'' + h.id + '\', \'' + safeName + '\')"' +
-              ' aria-label="Delete ' + h.name + '"' +
+            '  class="del-btn"' +
+            '  onclick="askDelete(\'' + h.id + '\', \'' + safeName + '\')"' +
+            '  aria-label="Delete ' + h.name + '"' +
             '>✕</button>' +
+
           '</div>' +
 
-          /* Monthly calendar */
           '<div class="cal-wrap">' + renderCalendar(h) + '</div>' +
 
         '</div>'
       );
     }).join('');
   }
+
+
+  /* ══════════════════════════════════
+     START
+  ══════════════════════════════════ */
+  initAuth();
 
 </script>
 </body>
